@@ -3,7 +3,7 @@
 Functions to convert METASPACE datasets to 
 [AnnData objects](https://anndata.readthedocs.io/en/stable/index.html).
 
-This makes it easy to work use the 
+This makes it easy to work with the 
 [scanpy](https://scanpy.readthedocs.io/en/stable/)
 and
 [squidpy](https://squidpy.readthedocs.io/en/stable/index.html)
