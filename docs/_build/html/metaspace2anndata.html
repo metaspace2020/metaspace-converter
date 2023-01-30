@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>metaspace2anndata package &mdash; METASPACE to AnnData  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> METASPACE to AnnData
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">metaspace2anndata package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-metaspace2anndata.converter">metaspace2anndata.converter module</a><ul>
+<li><a class="reference internal" href="#metaspace2anndata.converter.dataset_to_anndata"><code class="docutils literal notranslate"><span class="pre">dataset_to_anndata()</span></code></a></li>
+<li><a class="reference internal" href="#metaspace2anndata.converter.dataset_to_anndata_oi"><code class="docutils literal notranslate"><span class="pre">dataset_to_anndata_oi()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-metaspace2anndata.utils">metaspace2anndata.utils module</a><ul>
+<li><a class="reference internal" href="#metaspace2anndata.utils.get_xy_coordinates"><code class="docutils literal notranslate"><span class="pre">get_xy_coordinates()</span></code></a></li>
+<li><a class="reference internal" href="#metaspace2anndata.utils.m_results_replace_index"><code class="docutils literal notranslate"><span class="pre">m_results_replace_index()</span></code></a></li>
+<li><a class="reference internal" href="#metaspace2anndata.utils.reshape_im_array"><code class="docutils literal notranslate"><span class="pre">reshape_im_array()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-metaspace2anndata">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">METASPACE to AnnData</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">metaspace2anndata package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/metaspace2anndata.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="metaspace2anndata-package">
+<h1>metaspace2anndata package<a class="headerlink" href="#metaspace2anndata-package" title="Permalink to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-metaspace2anndata.converter">
+<span id="metaspace2anndata-converter-module"></span><h2>metaspace2anndata.converter module<a class="headerlink" href="#module-metaspace2anndata.converter" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="metaspace2anndata.converter.dataset_to_anndata">
+<span class="sig-prename descclassname"><span class="pre">metaspace2anndata.converter.</span></span><span class="sig-name descname"><span class="pre">dataset_to_anndata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">database</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('HMDB',</span> <span class="pre">'v4')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fdr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">results</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_annotation_images</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/metaspace2anndata/converter.html#dataset_to_anndata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metaspace2anndata.converter.dataset_to_anndata" title="Permalink to this definition"></a></dt>
+<dd><p>Convert METASPACE datasets to AnnData object.</p>
+<p>Requires only a dataset (SMDataset), database (e.g. <cite>(“HMDB”, “v4”)</cite>), and fdr.
+Output of <cite>SMDataset.results</cite> and <cite>SMDataset.all_ion_images</cite> can be provided to work,
+since the function does not allow to specify all parameters.</p>
+<p>This function does not download the optical image for datasets.</p>
+<p>Metadata is stored in <cite>adata.uns</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ds</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">SMDataset</span></code>) – METASPACE dataset object</p></li>
+<li><p><strong>database</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]) – Database to download results. Is not used if <cite>results</cite> and <cite>all_annotation_images</cite> is provided.</p></li>
+<li><p><strong>fdr</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – FDR threshold. Is not used if <cite>results</cite> and <cite>all_annotation_images</cite> is provided.</p></li>
+<li><p><strong>results</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>]) – Output of <cite>SMDataset.results()</cite> call.</p></li>
+<li><p><strong>all_annotation_images</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">IsotopeImages</span></code>]]) – Output of <cite>SMDataset.all_ion_images()</cite> call.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">AnnData</span></code></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>AnnData object including images, metadata, and annotation information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="metaspace2anndata.converter.dataset_to_anndata_oi">
+<span class="sig-prename descclassname"><span class="pre">metaspace2anndata.converter.</span></span><span class="sig-name descname"><span class="pre">dataset_to_anndata_oi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">database</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('HMDB',</span> <span class="pre">'v4')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fdr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">results</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_annotation_images</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/metaspace2anndata/converter.html#dataset_to_anndata_oi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metaspace2anndata.converter.dataset_to_anndata_oi" title="Permalink to this definition"></a></dt>
+<dd><p>Convert METASPACE datasets to AnnData object with optical image.</p>
+<p>Requires only a dataset (SMDataset), database (e.g. <cite>(“HMDB”, “v4”)</cite>), and fdr.
+Output of <cite>SMDataset.results</cite> and <cite>SMDataset.all_ion_images</cite> can be provided to work,
+since the function does not allow to specify all parameters.</p>
+<p>THis function return the AnnData object with optical image, and ion images transformed to fit optical image.</p>
+<p>Metadata is stored in <cite>adata.uns</cite>.
+The optical image is stored in <cite>adata.uns[“spatial”][“image”][“images”][“hires”]</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ds</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">SMDataset</span></code>) – METASPACE dataset object</p></li>
+<li><p><strong>database</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – Database to download results. Is not used if <cite>results</cite> and <cite>all_annotation_images</cite> is provided.</p></li>
+<li><p><strong>fdr</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – FDR threshold. Is not used if <cite>results</cite> and <cite>all_annotation_images</cite> is provided.</p></li>
+<li><p><strong>results</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>]) – Output of <cite>SMDataset.results()</cite> call.</p></li>
+<li><p><strong>all_annotation_images</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">IsotopeImages</span></code>]]) – Output of <cite>SMDataset.all_ion_images()</cite> call.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>AnnData object including images, metadata, and annotation information.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If no optical image is available for dataset.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-metaspace2anndata.utils">
+<span id="metaspace2anndata-utils-module"></span><h2>metaspace2anndata.utils module<a class="headerlink" href="#module-metaspace2anndata.utils" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="metaspace2anndata.utils.get_xy_coordinates">
+<span class="sig-prename descclassname"><span class="pre">metaspace2anndata.utils.</span></span><span class="sig-name descname"><span class="pre">get_xy_coordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">im_array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xdata</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/metaspace2anndata/utils.html#get_xy_coordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metaspace2anndata.utils.get_xy_coordinates" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="metaspace2anndata.utils.m_results_replace_index">
+<span class="sig-prename descclassname"><span class="pre">metaspace2anndata.utils.</span></span><span class="sig-name descname"><span class="pre">m_results_replace_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/metaspace2anndata/utils.html#m_results_replace_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metaspace2anndata.utils.m_results_replace_index" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="metaspace2anndata.utils.reshape_im_array">
+<span class="sig-prename descclassname"><span class="pre">metaspace2anndata.utils.</span></span><span class="sig-name descname"><span class="pre">reshape_im_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">im_array</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/metaspace2anndata/utils.html#reshape_im_array"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metaspace2anndata.utils.reshape_im_array" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-metaspace2anndata">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-metaspace2anndata" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Tim Daniel Rose.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
