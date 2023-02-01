@@ -66,11 +66,7 @@ def dataset_to_anndata(ds: SMDataset,
     adata.uns[spatial_key][library_id]["scalefactors"] = {"tissue_hires_scalef": 1, "spot_diameter_fullres": 0.5}
 
     # Get METASPACE infos
-    adata.uns['metaspace_metadata'] = ds.metadata
-    adata.uns['metaspace_id'] = ds.id
-    adata.uns['metaspace_database_details'] = ds.database_details
-    adata.uns['metaspace_config'] = ds.config
-    adata.uns['metaspace_name'] = ds.name
+    add_metadata(adata, ds)
 
     return adata
 
@@ -87,7 +83,7 @@ def dataset_to_anndata_oi(ds: SMDataset,
         Output of `SMDataset.results` and `SMDataset.all_ion_images` can be provided to work,
         since the function does not allow to specify all parameters.
 
-        THis function return the AnnData object with optical image, and ion images transformed to fit optical image.
+        This function return the AnnData object with optical image, and ion images transformed to fit optical image.
 
         Metadata is stored in `adata.uns`.
         The optical image is stored in `adata.uns["spatial"]["image"]["images"]["hires"]`
@@ -156,10 +152,6 @@ def dataset_to_anndata_oi(ds: SMDataset,
     adata.uns[spatial_key][library_id]["scalefactors"] = {"tissue_hires_scalef": 1, "spot_diameter_fullres": 0.5}
 
     # Get METASPACE infos
-    adata.uns['metaspace_metadata'] = ds.metadata
-    adata.uns['metaspace_id'] = ds.id
-    adata.uns['metaspace_database_details'] = ds.database_details
-    adata.uns['metaspace_config'] = ds.config
-    adata.uns['metaspace_name'] = ds.name
+    add_metadata(adata, ds)
 
     return adata
