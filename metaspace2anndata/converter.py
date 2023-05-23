@@ -49,13 +49,16 @@ def dataset_to_anndata(ds: SMDataset,
 
     # Remove additional dimension with placeholder for isotopes
     im_array = reshape_im_array(im_array)
-
+    
+    # save original dimensions
+    org_shape = im_array.shape
+    
     # Transform to X,Y representation
     xdata = im_array.reshape((im_array.shape[0], -1)).transpose()
 
     xy_coord, xy_coord_df = get_xy_coordinates(im_array, xdata)
 
-    adata = AnnData(X=xdata, var=res, obs=xy_coord_df, obsm={"spatial": xy_coord})
+    adata = AnnData(X=xdata, var=res, obs=xy_coord_df, obsm={"spatial": xy_coord, 'original_image_dimensions': (org_shape[1], org_shape[2])})
 
     # Only important for background image, but Squidpy sometimes complains, if this is not there.
     spatial_key = "spatial"
