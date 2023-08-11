@@ -1,2 +1,14 @@
 .idea
 metaspace2anndata.egg-info
+.ipynb_checkpoints/
+*.out
+*.err
+__pycache__/*
+*.csv#
+.Rproj.user
+*.Rproj
+plots/*
+*.html
+analysis_config.json
+.Rhistory
+
