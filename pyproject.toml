@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "metaspace-converter"
+version = "0.1.0"
+authors = [
+    {name = "Tim Daniel Rose", email = "tim.rose@embl.de"},
+]
+description = "Convert Metaspace datasets to AnnData"
+requires-python = ">=3.8"
+license = {text = "GPLv3"}
+classifiers = [
+    "License :: OSI Approved :: GNU General Public License v3",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Intended Audience :: Science/Research",
+    "Natural Language :: English",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3"
+]
+dependencies = [
+    "pandas",
+    "numpy",
+    "anndata",
+    "metaspace2020",
+]
+dynamic = ["readme"]
+
+[project.urls]
+Repository = "https://github.com/tdrose/metaspace-converter"
+Source = "https://git.embl.de/grp-alexandrov/metaspace-to-anndata"
+# Publication = ""
+
+[tool.setuptools.packages.find]
+where = ["."]
+
+[tool.setuptools.dynamic]
+readme = {file = "README.md", content-type = "text/markdown"}
