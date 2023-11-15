@@ -7,6 +7,7 @@ name = "metaspace-converter"
 version = "0.1.0"
 authors = [
     {name = "Tim Daniel Rose", email = "tim.rose@embl.de"},
+    {name = "Andreas Eisenbarth", email = "andreas.eisenbarth@embl.de"},
 ]
 description = "Convert Metaspace datasets to AnnData"
 requires-python = ">=3.8"
