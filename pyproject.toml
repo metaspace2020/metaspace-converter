@@ -82,6 +82,16 @@ all = true
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-# CLI options: Show extra test summary for all except passed; quiet
-# Report the duration of the slowest test functions (slower than a minimum number of seconds).
-addopts = "-ra --quiet --durations=5 --durations-min=1.0"
+# CLI options:
+# -ra: Show extra test summary for (a)ll except passed
+# --quiet: Decrease verbosity
+# --doctest*: Run example code in docs
+addopts = '-ra --quiet'
+filterwarnings = [
+    # Triggered by spatialdata==0.0.15
+    "ignore:is_categorical_dtype is deprecated and will be removed in a future version:FutureWarning:spatialdata",
+    # Triggered by xarray-schema==0.0.3
+    "ignore:pkg_resources is deprecated as an API:DeprecationWarning:xarray_schema",
+    # Triggered by matplotlib<3.8.0, xarray-schema==0.0.3
+    "ignore:Deprecated call to `pkg_resources.declare_namespace:DeprecationWarning:pkg_resources",
+]
