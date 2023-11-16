@@ -43,38 +43,40 @@ def metaspace_to_spatialdata(
     **annotation_filter,
 ) -> SpatialData:
     """
-    Download a METASPACE dataset as a SpatialData object.
+    Download a METASPACE dataset as a :py:class:`SpatialData` object.
 
-    See: http://metaspace2020.eu/#/about
+    See: https://metaspace2020.eu/about
 
     Args:
-        dataset: A METASPACE dataset instance. If not provided, the `dataset_id` must be given.
+        dataset: A METASPACE dataset instance. If not provided, the ``dataset_id`` must be given.
         dataset_id: The unique ID of a dataset on METASPACE, e.g. "2021-09-03_11h43m13s"
         database: A single METASPACE database given as a tuple of name and version. Usually it is
-            displayed on METASPACE as "HMDB – v4" which corresponds to `("HMDB", "v4")`.
+            displayed on METASPACE as "HMDB – v4" which corresponds to ``("HMDB", "v4")``.
         fdr: Returns only annotations for which the false discovery rate is less or equal to this
             limit.
         use_tic: When True, the output values will be scaled by the total ion count per pixel and
             will be in 0.0 to 1.0 range.
-        metadata_as_obs: Whether to store metadata in the `obs` dataframe instead of `uns`. For a
-            single METASPACE dataset, metadata is the same for all pixels, so it would be duplicated
-            for all `obs`. When combining multiple datasets, it would be preserved in `obs` but
-            not in `uns`.
+        metadata_as_obs: Whether to store metadata in the ``obs`` dataframe instead of ``uns``. For
+            a single METASPACE dataset, metadata is the same for all pixels, so it would be
+            duplicated for all ``obs``. When combining multiple datasets, it would be preserved in
+            ``obs`` but not in ``uns``.
         add_optical_image: Whether to also add the optical image (if one exists) to SpatialData
             images. If none exists, it is not added, and no error raised.
         optical_name_added: Name of the element where to store the image in the SpatialData object
         add_points: Whether to also add ion image pixel coordinates as SpatialData points. This
             allows to spatially visualize the ion image values. If False, only ion intensities are
-            added to the table and coordinates are added to `obs`.
+            added to the table and coordinates are added to ``obs``.
         points_name_added: Name of the element where to store the points in the SpatialData object
         sm: Optionally a cached SMInstance
         annotation_filter: Additional keyword arguments passed to the METASPACE API.
 
     Returns:
-        A SpatialData object with:
-        - ion intensities and metadata (`.table`)
-        - optical image (`.images['optical_image']`)
-        - sampling coordinates (`.points['maldi_points']`)
+        A :py:class:`SpatialData` object with
+            * ion intensities and metadata: ``.table``
+            * optical image: ``.images["optical_image"]`` (or ``optical_name_added``)
+            * sampling coordinates: ``.points["maldi_points"]`` (or ``points_name_added``) in a
+              coordinate system relative to the top-left image corner and physical scale
+              (micrometers)
 
     Raises:
         ValueError: If something is wrong with the input data or parameters
@@ -134,7 +136,7 @@ def optical_image_to_spatial_image(dataset: SMDataset) -> Optional[SpatialImage]
     """
     optical_images = dataset.optical_images()
     image_yx_rgb = optical_images[0]
-    # Transformation from optical image to ion image coordinate system (inverse of `_transforms`)
+    # Transformation from optical image to ion image coordinate system (inverse of ``_transforms``)
     matrix_xy = optical_images._itransforms[0]
     if _is_matrix_homogeneous(matrix_xy):
         affine_matrix_xy = matrix_xy
@@ -182,8 +184,8 @@ def _create_spatialdata_table(adata: AnnData) -> AnnData:
 
 def _create_points(dataset: SMDataset, adata: AnnData, name: str = POINTS_KEY) -> pd.DataFrame:
     # FIXME: PointsModel does not yet allow to specify units, we should set micrometers as in image.
-    # FIXME: Workaround for that napari-spatialdata does not allow to visualize values from `X`
-    #  array, only from `obs`. For now, we copy X to `obs` to enable visualization.
+    # FIXME: Workaround for that napari-spatialdata does not allow to visualize values from ``X``
+    #  array, only from ``obs``. For now, we copy X to ``obs`` to enable visualization.
     # points = PointsModel.parse(
     #     adata.obs[[X, Y]].reset_index(),
     #     transformations={COORD_SYS_GLOBAL: get_ion_image_to_physical_transformation(dataset)},

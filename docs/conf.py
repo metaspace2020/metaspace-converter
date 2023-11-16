@@ -17,9 +17,9 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'METASPACE to AnnData'
-copyright = '2023, Tim Daniel Rose'
-author = 'Tim Daniel Rose'
+project = "METASPACE Converter"
+copyright = "2023, Tim Daniel Rose"
+author = "Tim Daniel Rose"
 
 
 # -- General configuration ---------------------------------------------------
@@ -28,29 +28,72 @@ author = 'Tim Daniel Rose'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.viewcode',
-    'sphinx.ext.napoleon',
-    'sphinx_autodoc_typehints'
+    # Include API documentation from docstrings
+    "sphinx.ext.autodoc",
+    # Executes and tests example code to ensure it is (still) working
+    "sphinx.ext.doctest",
+    # Links symbols in docstrings to API documentation of external projects
+    "sphinx.ext.intersphinx",
+    # Support for Google style docstrings
+    "sphinx.ext.napoleon",
+    # Adds a source code page to each API element
+    "sphinx.ext.viewcode",
+    # Uses type hints from signature instead of types in docstrings
+    "sphinx_autodoc_typehints",
+    # Links symbols within code blocks to API documentation
+    "sphinx_codeautolink",
+    # Adds a copy button to code blocks
+    "sphinx_copybutton",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ["_templates"]
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
-
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'sphinx_rtd_theme'
+html_theme = "sphinx_rtd_theme"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ["_static"]
+
+# Doctest allows to execute example code with directives "" using "make doctest".
+# Compared to the Python standard library module, this extension detects code blocks
+# without requiring ">>> " as prefix.
+# Remove doctest flags within the examples ("#doctest: +SKIP"), not to distract readers.
+trim_doctest_flags = True
+# Setup common imports, so they are available in the examples.
+doctest_global_setup = """
+try:
+    import numpy as np
+    import pandas as pd
+    import matplotlib
+    # Ensure doctest does not attempt to display plots in blocking GUI windows.
+    matplotlib.use("agg")
+except ImportError:
+    np = None
+    pd = None
+"""
+
+# This creates links of symbols to external documentation.
+intersphinx_mapping = {
+    "anndata": ("https://anndata.readthedocs.io/en/stable/", None),
+    "metaspace": ("https://metaspace2020.readthedocs.io/en/latest/", None),
+    "numpy": ("https://numpy.org/doc/stable/", None),
+    "python": ("https://docs.python.org/3/", None),
+    "scanpy": ("https://scanpy.readthedocs.io/en/stable/", None),
+    "squidpy": ("https://squidpy.readthedocs.io/en/stable/", None),
+    "spatialdata": ("https://spatialdata.scverse.org/en/latest/", None),
+    "spatialdata-plot": ("https://spatialdata.scverse.org/projects/plot/en/latest/", None),
+}
+# Needed to help MyST distinguish between URL schemes and references with a colon (?)
+myst_url_schemes = ["http", "https"]

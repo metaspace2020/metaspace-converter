@@ -47,9 +47,9 @@ def metaspace_to_anndata(
     **annotation_filter,
 ) -> AnnData:
     """
-    Downloads a METASPACE dataset to an AnnData object.
+    Downloads a METASPACE dataset to an :py:class:`AnnData` object.
 
-    See: http://metaspace2020.eu/#/about
+    See: https://metaspace2020.eu/about
 
     Args:
         dataset: A METASPACE dataset instance. If not provided, the `dataset_id` must be given.
@@ -69,12 +69,14 @@ def metaspace_to_anndata(
         annotation_filter: Additional keyword arguments passed to the METASPACE API.
 
     Returns:
-        An AnnData object with:
-        - ion intensities (`.X`)
-        - ion image pixel coordinates (`.obs[['x', 'y']]`)
-        - spatial coordinates (`.obsm['spatial']`)
-        - ion properties (`.var`)
-        - metadata (`.uns['metaspace'`)
+        An :py:class:`AnnData` object with
+            * ion intensities: ``.X``
+            * ion image pixel coordinates: ``.obs[["ion_image_pixel_x", "ion_image_pixel_y"]]``
+            * spatial coordinates: ``.obsm["spatial"]``
+            * ion properties: ``.var``, for example "formula", "adduct", "mz", "fdr",
+              "moleculeNames", "moleculeIds", "intensity"…
+            * METASPACE metadata: ``.uns["metaspace"]`` if not ``metadata_as_obs``
+            * SquidPy metadata: ``.uns["spatial"]`` if ``add_optical_image``
 
     Raises:
         ValueError: If something is wrong with the input data or parameters
