@@ -1,9 +1,24 @@
+# JetBrains IDEs
 .idea
-metaspace2anndata.egg-info
-.ipynb_checkpoints/
+
+# Compiled python modules.
+*.pyc
+__pycache__
+
+# Setuptools distribution folder.
+build/*
+dist/*
+
+# Python egg metadata, regenerated from source files by setuptools.
+/*.egg-info
+
+# Python tools: Jupyter, Pytest
+.ipynb_checkpoints
+.pytest_cache
+
+# Other
 *.out
 *.err
-__pycache__/*
 *.csv#
 .Rproj.user
 *.Rproj
@@ -11,4 +26,3 @@ plots/*
 *.html
 analysis_config.json
 .Rhistory
-
