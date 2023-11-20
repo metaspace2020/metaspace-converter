@@ -38,6 +38,6 @@ jobs:
               with:
                   branch: master
                   dir_docs: docs
-                  sphinx-api-opts: "--separate -o . ../"
-                  sphinx-api-exclude: ""
+                  sphinx-apidoc-opts: "--separate -o . ../"
+                  sphinx-apidoc-exclude: ""
                   sphinx-opts: ""
