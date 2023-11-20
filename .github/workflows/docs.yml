@@ -31,10 +31,13 @@ jobs:
               run: |
                 python -m pip install -vv --no-build-isolation .
             - name: Running the Sphinx to gh-pages Action
-              uses: uibcdf/action-sphinx-docs-to-gh-pages@v2.0.0
+              # uses: uibcdf/action-sphinx-docs-to-gh-pages@v2.0.0
+              # Workaround for bug about improper quoting of GitHub usernames with spaces:
+              # https://github.com/uibcdf/action-sphinx-docs-to-gh-pages/pull/8
+              uses: aeisenbarth/action-sphinx-docs-to-gh-pages@patch-1
               with:
                   branch: master
                   dir_docs: docs
-                  sphinx-api-opts: "--separate -o . ../"
-                  sphinx-api-exclude: ""
+                  sphinx-apidoc-opts: "--separate -o . ../"
+                  sphinx-apidoc-exclude: ""
                   sphinx-opts: ""
