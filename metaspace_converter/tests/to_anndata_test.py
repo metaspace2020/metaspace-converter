@@ -14,6 +14,8 @@ from metaspace_converter.to_anndata import (
     metaspace_to_anndata,
 )
 
+from metaspace_converter import anndata_to_image_array
+
 METASPACE_DEFAULT_CONFIG_FILE = "~/.metaspace"
 METASPACE_EMAIL_ENV = "METASPACE_EMAIL"
 METASPACE_API_KEY_ENV = "METASPACE_API_KEY"
@@ -87,3 +89,33 @@ def test_metaspace_to_anndata(
     # Check that it can be successfully written.
     actual.write_h5ad(tmp_path / "adata.h5ad")
     actual.write_zarr(tmp_path / "adata.zarr")
+
+
+@pytest.mark.parametrize(
+    ("dataset_id", "database", "fdr", "metadata_as_obs", "add_optical_image"),
+    [
+        ("2021-09-03_11h43m13s", ("CoreMetabolome", "v3"), 0.1, False, False),
+        ("2021-09-03_11h43m13s", ("CoreMetabolome", "v3"), 0.1, True, False),
+        ("2021-09-03_11h43m13s", ("CoreMetabolome", "v3"), 0.1, False, True),
+    ],
+)
+def test_anndata_to_image_array(
+    dataset_id, database, fdr, sm, metadata_as_obs, add_optical_image, tmp_path
+):
+    actual = metaspace_to_anndata(
+        dataset_id=dataset_id,
+        database=database,
+        fdr=fdr,
+        sm=sm,
+        metadata_as_obs=metadata_as_obs,
+        add_optical_image=add_optical_image,
+    )
+
+    img_array = anndata_to_image_array(actual)
+    assert img_array.shape == (actual.shape[1], 
+                               actual.obs['ion_image_pixel_y'].max()+1, 
+                               actual.obs['ion_image_pixel_x'].max()+1)
+    
+    assert img_array.shape == (actual.shape[1], 
+                               actual.uns['metaspace']['image_size']['y'], 
+                               actual.uns['metaspace']['image_size']['x'])
