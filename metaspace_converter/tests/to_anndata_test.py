@@ -7,7 +7,7 @@ import pytest
 from metaspace import SMInstance
 
 from metaspace_converter import anndata_to_image_array
-from metaspace_converter.constants import COL, METASPACE_KEY, SPATIAL_KEY
+from metaspace_converter.constants import COL, METASPACE_KEY, SPATIAL_KEY, X, Y
 from metaspace_converter.to_anndata import get_ion_image_shape, metaspace_to_anndata
 
 METASPACE_DEFAULT_CONFIG_FILE = "~/.metaspace"
@@ -104,12 +104,12 @@ def test_anndata_to_image_array(
     img_array = anndata_to_image_array(actual)
     assert img_array.shape == (
         actual.shape[1],
-        actual.obs["ion_image_pixel_y"].max() + 1,
-        actual.obs["ion_image_pixel_x"].max() + 1,
+        actual.obs[COL.ion_image_pixel_y].max() + 1,
+        actual.obs[COL.ion_image_pixel_x].max() + 1,
     )
 
     assert img_array.shape == (
         actual.shape[1],
-        actual.uns["metaspace"]["image_size"]["y"],
-        actual.uns["metaspace"]["image_size"]["x"],
+        actual.uns[METASPACE_KEY]["image_size"][Y],
+        actual.uns[METASPACE_KEY]["image_size"][X],
     )
