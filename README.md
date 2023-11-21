@@ -88,9 +88,7 @@ sq.pl.spatial_scatter(
 from metaspace_converter import metaspace_to_anndata, anndata_to_image_array
 
 # Download data
-adata2 = metaspace_to_anndata(
-    dataset_id="2023-11-14_21h58m39s",
-    fdr=0.1)
+adata2 = metaspace_to_anndata(dataset_id="2023-11-14_21h58m39s", fdr=0.1)
 
 ion_images = anndata_to_image_array(adata2)
 

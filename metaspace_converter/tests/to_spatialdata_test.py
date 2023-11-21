@@ -2,17 +2,12 @@ import numpy as np
 import pytest
 from multiscale_spatial_image import MultiscaleSpatialImage
 
+from metaspace_converter.constants import COORD_SYS_GLOBAL, OPTICAL_IMAGE_KEY, POINTS_KEY, X, Y
+
 # The import metaspace_credentials is need by the fixture sm.
 from metaspace_converter.tests.to_anndata_test import metaspace_credentials, sm  # noqa
 from metaspace_converter.to_anndata import COL, METASPACE_KEY, get_ion_image_shape
-from metaspace_converter.to_spatialdata import (
-    COORD_SYS_GLOBAL,
-    OPTICAL_IMAGE_KEY,
-    POINTS_KEY,
-    X,
-    Y,
-    metaspace_to_spatialdata,
-)
+from metaspace_converter.to_spatialdata import metaspace_to_spatialdata
 
 
 @pytest.mark.parametrize(

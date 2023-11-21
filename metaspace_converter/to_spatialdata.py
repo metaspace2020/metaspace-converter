@@ -1,5 +1,5 @@
 import warnings
-from typing import Final, Optional
+from typing import Optional
 
 import numpy as np
 import pandas as pd
@@ -11,21 +11,22 @@ from spatialdata import SpatialData
 from spatialdata.models import Image2DModel, PointsModel, TableModel
 from spatialdata.transformations import Affine, Scale, Sequence as SequenceTransform, Translation
 
-from metaspace_converter.to_anndata import COL, metaspace_to_anndata
+from metaspace_converter.constants import (
+    COL,
+    COORD_SYS_GLOBAL,
+    INSTANCE_KEY,
+    MICROMETER,
+    OPTICAL_IMAGE_KEY,
+    POINTS_KEY,
+    REGION_KEY,
+    XY,
+    YX,
+    YXC,
+    X,
+    Y,
+)
+from metaspace_converter.to_anndata import metaspace_to_anndata
 from metaspace_converter.utils import has_optical_image
-
-COORD_SYS_GLOBAL: Final = "global"
-MICROMETER: Final = "micrometer"
-OPTICAL_IMAGE_KEY: Final = "optical_image"
-POINTS_KEY: Final = "maldi_points"
-REGION_KEY: Final = "region"
-INSTANCE_KEY: Final = "instance_id"
-X: Final = "x"
-Y: Final = "y"
-C: Final = "c"
-XY: Final = (X, Y)
-YX: Final = (Y, X)
-YXC: Final = (Y, X, C)
 
 
 def metaspace_to_spatialdata(
