@@ -2,20 +2,18 @@ import numpy as np
 from anndata import AnnData
 
 from metaspace_converter.constants import COL, METASPACE_KEY, X, Y
+from metaspace_converter.to_anndata import all_image_pixel_coordinates
 
 
-def _check_pixel_list(adata: AnnData) -> bool:
-
+def _check_pixel_coordinates(adata: AnnData) -> bool:
     sorted_obs = adata.obs.sort_values([COL.ion_image_pixel_y, COL.ion_image_pixel_x])
 
-    pixel_list = [
-        (y, x) for y, x in zip(sorted_obs[COL.ion_image_pixel_y], sorted_obs[COL.ion_image_pixel_x])
-    ]
+    pixel_list = sorted_obs[[COL.ion_image_pixel_y, COL.ion_image_pixel_x]].values
 
     img_size = adata.uns[METASPACE_KEY]["image_size"]
-    required_pixels = [(y, x) for y in range(img_size[Y]) for x in range(img_size[X])]
+    required_pixels = all_image_pixel_coordinates((img_size[Y], img_size[X]))
 
-    return pixel_list == required_pixels
+    return np.all(np.equal(pixel_list, required_pixels))
 
 
 def anndata_to_image_array(adata: AnnData) -> np.ndarray:
@@ -47,7 +45,7 @@ def anndata_to_image_array(adata: AnnData) -> np.ndarray:
         raise ValueError("Number of observations does not match the original image dimensions")
 
     # Check if all pixels are available
-    if not _check_pixel_list(adata):
+    if not _check_pixel_coordinates(adata):
         raise ValueError("Not all pixels for ion images are available")
 
     # Sort indices, in case of modified order of pixels (obs)
