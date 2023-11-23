@@ -82,6 +82,21 @@ sq.pl.spatial_scatter(
 
 ![Image](docs/_static/img/example_img_sq.png)
 
+#### Convert AnnData objects to ion image arrays
+
+```python
+from metaspace_converter import metaspace_to_anndata, anndata_to_image_array
+
+# Download data
+adata2 = metaspace_to_anndata(dataset_id="2023-11-14_21h58m39s", fdr=0.1)
+
+ion_images = anndata_to_image_array(adata2)
+
+# 6 ion images of shape 61x78
+print(ion_images.shape)
+# > (6, 61, 78)
+```
+
 ### SpatialData
 
 Here using a reversed colormap which better represents intense values on bright background.

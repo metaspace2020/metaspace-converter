@@ -1,5 +1,4 @@
-from dataclasses import dataclass
-from typing import Container, Final, Optional
+from typing import Container, Optional
 
 import numpy as np
 import pandas as pd
@@ -12,6 +11,14 @@ from metaspace.sm_annotation_utils import (
     SMDataset,
 )
 
+from metaspace_converter.constants import (
+    COL,
+    METASPACE_KEY,
+    OBS_INDEX_NAME,
+    SPATIAL_KEY,
+    VAR_INDEX_NAME,
+    Shape2d,
+)
 from metaspace_converter.utils import (
     empty_columns_to_nan,
     has_optical_image,
@@ -19,20 +26,6 @@ from metaspace_converter.utils import (
     stringify_list_columns,
     transform_coords,
 )
-
-SPATIAL_KEY: Final = "spatial"
-METASPACE_KEY: Final = "metaspace"
-OBS_INDEX_NAME: Final = "ion_image_pixel"
-VAR_INDEX_NAME: Final = "formula_adduct"
-Shape2d = tuple[int, int]
-
-
-@dataclass
-class COL:
-    ion_image_shape_y: Final = "ion_image_shape_y"
-    ion_image_shape_x: Final = "ion_image_shape_x"
-    ion_image_pixel_y: Final = "ion_image_pixel_y"
-    ion_image_pixel_x: Final = "ion_image_pixel_x"
 
 
 def metaspace_to_anndata(

@@ -6,13 +6,8 @@ import numpy as np
 import pytest
 from metaspace import SMInstance
 
-from metaspace_converter.to_anndata import (
-    COL,
-    METASPACE_KEY,
-    SPATIAL_KEY,
-    get_ion_image_shape,
-    metaspace_to_anndata,
-)
+from metaspace_converter.constants import COL, METASPACE_KEY, SPATIAL_KEY
+from metaspace_converter.to_anndata import get_ion_image_shape, metaspace_to_anndata
 
 METASPACE_DEFAULT_CONFIG_FILE = "~/.metaspace"
 METASPACE_EMAIL_ENV = "METASPACE_EMAIL"

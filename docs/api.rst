@@ -5,6 +5,6 @@ metaspace_converter
 -------------------
 
 .. automodule:: metaspace_converter
-   :members: metaspace_to_anndata, metaspace_to_spatialdata
+   :members:
    :undoc-members:
    :show-inheritance:
