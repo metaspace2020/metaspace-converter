@@ -1,34 +1,33 @@
-# METASPACE to AnnData
+# METASPACE converter
 
-Functions to convert METASPACE datasets to
-[AnnData objects](https://anndata.readthedocs.io/en/stable/index.html).
+Python package to download and convert datasets from the [METASPACE](https://metaspace2020.eu/)
+knowledge base to common formats for single-cell and spatial omics analysis.
+Datasets can be directly downloaded to
+[AnnData](https://anndata.readthedocs.io/en/stable/index.html) and
+[SpatialData](https://spatialdata.scverse.org/en/latest/) objects.
 
-This makes it easy to work with the
-[scanpy](https://scanpy.readthedocs.io/en/stable/),
-[squidpy](https://squidpy.readthedocs.io/en/stable/index.html)
-and
-[SpatialData](https://spatialdata.scverse.org/en/latest/)
-ecosystem with METASPACE data.
+[AnnData](https://anndata.readthedocs.io/en/stable/index.html) provides is underlying data format
+of many packages of the [scverse](https://doi.org/10.1038/s41587-023-01733-8) such as
+[scanpy](https://scanpy.readthedocs.io/en/stable/) for single-cell data analysis and
+[squidpy](https://squidpy.readthedocs.io/en/stable/index.html) for spatial omics analysis.
+
+Another supported format that is part of the [scverse](https://doi.org/10.1038/s41587-023-01733-8)
+is [SpatialData](https://spatialdata.scverse.org/en/latest/) for storage, alignment, and processing
+of spatial omics data. This enables users to easily align and integrate METASPACE datasets
+to other spatial omics modalities.
+
+If you encounter any bugs or have suggestions for new features, please open an issue in the
+[github repository](https://github.com/metaspace2020/metaspace-converter).
 
 ## Installation
 
-Clone repository
+Our package requires `python >= 3.8`.
 
-```
-git clone git@github.com:tdrose/metaspace-converter.git
-
-# Enter directory
-cd metaspace-converter
+```bash
+pip install -U git+https://github.com/metaspace2020/metaspace-converter@master
 ```
 
-Install package in development mode
-(in this way updates via `git pull` are applied without re-installation).
-
-```
-python -m pip install -e .
-```
-
-Import package
+### Import package
 
 ```python
 import metaspace_converter
@@ -36,7 +35,23 @@ import metaspace_converter
 
 ## Short tutorial
 
-### Plain AnnData with ScanPy
+The METASPACE-converter package is using the
+[python client](https://github.com/metaspace2020/metaspace/tree/master/metaspace/python-client)
+download datasets from METASPACE.
+It serves as a wrapper that downloads converts datasets directly to
+[AnnData](https://anndata.readthedocs.io/en/stable/index.html) and
+[SpatialData](https://spatialdata.scverse.org/en/latest/) objects.
+
+If you also need to upload or modify datasets on METASPACE, please check the
+[METASPACE python client documentation](https://metaspace2020.readthedocs.io/en/latest/index.html).
+
+### AnnData
+
+Datasets can be downloaded to AnnData objects using the `metaspace_to_anndata` function.
+This allows downstream analysis e.g. with [scanpy](https://scanpy.readthedocs.io/en/stable/)
+or [squidpy](https://squidpy.readthedocs.io/en/stable/index.html).
+
+#### Scanpy
 
 ```python
 from metaspace_converter import metaspace_to_anndata
@@ -61,7 +76,10 @@ sc.pl.spatial(
 
 ![Image](docs/_static/img/example_img_sc.png)
 
-### SquidPy
+#### Squidpy
+
+Optical images can also be downloaded and save in the object if available.
+Squidpy allows for an easy overlay of ion iamge and optical image.
 
 ```python
 from metaspace_converter import metaspace_to_anndata
@@ -84,6 +102,9 @@ sq.pl.spatial_scatter(
 
 #### Convert AnnData objects to ion image arrays
 
+If you want to work with the ion images as numpy arrays, the function `anndata_to_image_array` can
+convert previoysly workloaded AnnData objects to numpy arrays.
+
 ```python
 from metaspace_converter import metaspace_to_anndata, anndata_to_image_array
 
@@ -98,6 +119,9 @@ print(ion_images.shape)
 ```
 
 ### SpatialData
+
+Download to the [SpatialData](https://spatialdata.scverse.org/en/latest/) format equally easy and
+can be done with the `metaspace_to_spatialdata` function.
 
 Here using a reversed colormap which better represents intense values on bright background.
 
@@ -131,7 +155,3 @@ sdata.points["maldi_points"] = sdata.transform_element_to_coordinate_system(
 ```
 
 ![Image](docs/_static/img/example_img_sd.png)
-
-## Contact
-
-> Tim Daniel Rose (tim.rose@embl.de)
