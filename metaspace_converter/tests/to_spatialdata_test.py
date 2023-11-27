@@ -112,7 +112,7 @@ def test_metaspace_with_napari_spatialdata(dataset_id, database, fdr, sm, reques
     ][0]
     # 1. Select coordinate system
     sdata_widget.coordinate_system_widget._select_coord_sys(COORD_SYS_GLOBAL)
-    sdata_widget.elements_widget._onClickChange(COORD_SYS_GLOBAL)
+    sdata_widget.elements_widget._onItemChange(COORD_SYS_GLOBAL)
     # 2. Select image element
     sdata_widget._onClick(OPTICAL_IMAGE_KEY)
     # 3. Select points element

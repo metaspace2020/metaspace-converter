@@ -21,7 +21,7 @@ If you encounter any bugs or have suggestions for new features, please open an i
 
 ## Installation
 
-Our package requires `python >= 3.8`.
+Our package requires `python >= 3.9`.
 
 ```bash
 pip install -U git+https://github.com/metaspace2020/metaspace-converter@master
