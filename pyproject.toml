@@ -57,8 +57,9 @@ docs = [
 ]
 
 [project.urls]
-Repository = "https://github.com/tdrose/metaspace-converter"
-Source = "https://git.embl.de/grp-alexandrov/metaspace-to-anndata"
+Repository = "https://github.com/metaspace2020/metaspace-converter"
+Source = "https://github.com/metaspace2020/metaspace-converter"
+Documentation = "https://metaspace2020.github.io/metaspace-converter/"
 # Publication = ""
 
 [tool.setuptools.packages.find]
