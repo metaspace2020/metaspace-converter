@@ -17,7 +17,7 @@ of spatial omics data. This enables users to easily align and integrate METASPAC
 to other spatial omics modalities.
 
 If you encounter any bugs or have suggestions for new features, please open an issue in the
-[github repository](https://github.com/metaspace2020/metaspace-converter).
+[GitHub repository](https://github.com/metaspace2020/metaspace-converter).
 
 ## Installation
 
@@ -79,7 +79,7 @@ sc.pl.spatial(
 #### Squidpy
 
 Optical images can also be downloaded and save in the object if available.
-Squidpy allows for an easy overlay of ion iamge and optical image.
+Squidpy allows for an easy overlay of ion image and optical image.
 
 ```python
 from metaspace_converter import metaspace_to_anndata
@@ -103,7 +103,7 @@ sq.pl.spatial_scatter(
 #### Convert AnnData objects to ion image arrays
 
 If you want to work with the ion images as numpy arrays, the function `anndata_to_image_array` can
-convert previoysly workloaded AnnData objects to numpy arrays.
+convert previously downloaded AnnData objects to numpy arrays.
 
 ```python
 from metaspace_converter import metaspace_to_anndata, anndata_to_image_array
