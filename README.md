@@ -27,8 +27,9 @@ If you encounter any bugs or have suggestions for new features, please open an i
 
 Our package requires `python >= 3.9`.
 
+You can install the package directly from [PyPI](https://pypi.org/project/metaspace-converter/):
 ```bash
-pip install -U git+https://github.com/metaspace2020/metaspace-converter@master
+pip install metaspace-converter
 ```
 
 ### Import package
@@ -38,6 +39,8 @@ import metaspace_converter
 ```
 
 ## Short tutorial
+
+The full documentation for the package can be found here: [https://metaspace2020.github.io/metaspace-converter/](https://metaspace2020.github.io/metaspace-converter/)
 
 The METASPACE-converter package is using the
 [python client](https://github.com/metaspace2020/metaspace/tree/master/metaspace/python-client)
@@ -159,6 +162,11 @@ sdata.points["maldi_points"] = sdata.transform_element_to_coordinate_system(
 ```
 
 ![Image](docs/_static/img/example_img_sd.png)
+
+## License
+
+Unless specified otherwise in file headers or LICENSE files present in subdirectories, all files are licensed under the [Apache 2.0 license](https://github.com/metaspace2020/metaspace/blob/master/LICENSE).
+
 
 [badge-docs]: https://img.shields.io/github/actions/workflow/status/metaspace2020/metaspace-converter/docs.yml?label=documentation
 [badge-pypi]: https://img.shields.io/pypi/v/metaspace-converter
