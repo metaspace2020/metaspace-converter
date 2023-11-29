@@ -18,7 +18,8 @@ Installation
 ------------
 You can install the package via pip:
 
-.. testcode::
+
+.. code-block::
    
    pip install metaspace-converter 
 
