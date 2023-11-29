@@ -18,8 +18,8 @@
 # -- Project information -----------------------------------------------------
 
 project = "METASPACE Converter"
-copyright = "2023, Tim Daniel Rose"
-author = "Tim Daniel Rose"
+copyright = "2023; Tim Daniel Rose, Andreas Eisenbarth, Theodore Alexandrov"
+author = "Tim Daniel Rose, Andreas Eisenbarth"
 
 
 # -- General configuration ---------------------------------------------------
