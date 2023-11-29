@@ -70,6 +70,8 @@ convert previously downloaded AnnData objects to numpy arrays.
    print(ion_images.shape)
    # > (6, 61, 78)
 
+.. testoutput::
+   (20, 130, 143)
 
 SpatialData
 -----------
