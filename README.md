@@ -1,5 +1,9 @@
 # METASPACE converter
 
+[![Tests][badge-tests]][link-tests]
+[![Documentation][badge-docs]][link-docs]
+[![PyPI][badge-pypi]][link-pypi]
+
 Python package to download and convert datasets from the [METASPACE](https://metaspace2020.eu/)
 knowledge base to common formats for single-cell and spatial omics analysis.
 Datasets can be directly downloaded to
@@ -155,3 +159,10 @@ sdata.points["maldi_points"] = sdata.transform_element_to_coordinate_system(
 ```
 
 ![Image](docs/_static/img/example_img_sd.png)
+
+[badge-docs]: https://img.shields.io/github/actions/workflow/status/metaspace2020/metaspace-converter/docs.yml?label=documentation
+[badge-pypi]: https://img.shields.io/pypi/v/metaspace-converter
+[badge-tests]: https://img.shields.io/github/actions/workflow/status/metaspace2020/metaspace-converter/tests.yml?branch=master&label=tests
+[link-docs]: https://metaspace2020.github.io/metaspace-converter/
+[link-pypi]: https://pypi.org/project/metaspace-converter/
+[link-tests]: https://github.com/metaspace2020/metaspace-converter/actions/workflows/tests.yml
