@@ -110,7 +110,7 @@ def metaspace_to_spatialdata(
 
     # Create points
     if add_points:
-        points = _create_points(dataset, adata, name=points_name_added)
+        points = _create_points(dataset, adata)
         sdata.points[points_name_added] = points
 
     return sdata
@@ -183,7 +183,7 @@ def _create_spatialdata_table(adata: AnnData) -> AnnData:
     )
 
 
-def _create_points(dataset: SMDataset, adata: AnnData, name: str = POINTS_KEY) -> pd.DataFrame:
+def _create_points(dataset: SMDataset, adata: AnnData) -> pd.DataFrame:
     # FIXME: PointsModel does not yet allow to specify units, we should set micrometers as in image.
     # FIXME: Workaround for that napari-spatialdata does not allow to visualize values from ``X``
     #  array, only from ``obs``. For now, we copy X to ``obs`` to enable visualization.

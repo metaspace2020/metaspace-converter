@@ -89,3 +89,6 @@ Here using a reversed colormap which better represents intense values on bright 
    :hide:
 
    ...
+
+.. image:: ./_static/img/example_img_sd.png
+   :alt: Visualization with SpatialData
