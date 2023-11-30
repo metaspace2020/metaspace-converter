@@ -79,7 +79,7 @@ sc.pl.spatial(
 
 #### Squidpy
 
-Optical images can also be downloaded, if available, and saved in the object if available.
+Optical images can also be downloaded, if available, and saved in the AnnData object.
 Squidpy allows for an easy overlay of ion images and the optical image.
 
 ```python
