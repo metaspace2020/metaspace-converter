@@ -114,9 +114,9 @@ adata2 = metaspace_to_anndata(dataset_id="2023-11-14_21h58m39s", fdr=0.1)
 
 ion_images = anndata_to_image_array(adata2)
 
-# 6 ion images of shape 61x78
+# 20 ion images of shape 130x143
 print(ion_images.shape)
-# > (6, 61, 78)
+# > (20, 130, 143)
 ```
 
 ### SpatialData
