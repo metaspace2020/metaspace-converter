@@ -16,8 +16,8 @@ of many packages of the [scverse](https://doi.org/10.1038/s41587-023-01733-8) su
 [squidpy](https://squidpy.readthedocs.io/en/stable/index.html) for spatial omics analysis.
 
 Another supported format that is part of the [scverse](https://doi.org/10.1038/s41587-023-01733-8)
-is [SpatialData](https://spatialdata.scverse.org/en/latest/) for storage, alignment, and processing
-of spatial omics data. This enables users to easily align and integrate METASPACE datasets
+is [SpatialData](https://spatialdata.scverse.org/en/latest/) for storing, aligning, and processing spatial omics data. 
+This enables users to easily align and integrate METASPACE datasets
 to other spatial omics modalities.
 
 If you encounter any bugs or have suggestions for new features, please open an issue in the
@@ -32,20 +32,14 @@ You can install the package directly from [PyPI](https://pypi.org/project/metasp
 pip install metaspace-converter
 ```
 
-### Import package
-
-```python
-import metaspace_converter
-```
-
 ## Short tutorial
 
 The full documentation for the package can be found here: [https://metaspace2020.github.io/metaspace-converter/](https://metaspace2020.github.io/metaspace-converter/)
 
-The METASPACE-converter package is using the
+The METASPACE-converter package uses the
 [python client](https://github.com/metaspace2020/metaspace/tree/master/metaspace/python-client)
-download datasets from METASPACE.
-It serves as a wrapper that downloads converts datasets directly to
+to download datasets from METASPACE.
+It serves as a wrapper that downloads and converts datasets directly to
 [AnnData](https://anndata.readthedocs.io/en/stable/index.html) and
 [SpatialData](https://spatialdata.scverse.org/en/latest/) objects.
 
@@ -85,8 +79,8 @@ sc.pl.spatial(
 
 #### Squidpy
 
-Optical images can also be downloaded and save in the object if available.
-Squidpy allows for an easy overlay of ion image and optical image.
+Optical images can also be downloaded, if available, and saved in the object if available.
+Squidpy allows for an easy overlay of ion images and the optical image.
 
 ```python
 from metaspace_converter import metaspace_to_anndata
@@ -130,7 +124,7 @@ print(ion_images.shape)
 Download to the [SpatialData](https://spatialdata.scverse.org/en/latest/) format equally easy and
 can be done with the `metaspace_to_spatialdata` function.
 
-Here using a reversed colormap which better represents intense values on bright background.
+Here using a reversed colormap which better represents intense values on a bright background.
 
 ```python
 from metaspace_converter import metaspace_to_spatialdata
