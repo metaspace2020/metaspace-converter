@@ -25,7 +25,7 @@ is `SpatialData`_ for storing, aligning, and processing spatial omics data.
 This enables users to easily align and integrate METASPACE datasets to other spatial omics modalities.
 
 The METASPACE-converter package uses the `METASPACE python client`_
-download datasets from METASPACE.
+to download datasets from METASPACE.
 If you also need to upload or modify datasets on METASPACE, please check the `Python client documentation`_.
 
 If you encounter bugs or have suggestions for new features, please open an issue on `GitHub`_.
