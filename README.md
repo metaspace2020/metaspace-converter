@@ -10,7 +10,7 @@ Datasets can be directly downloaded to
 [AnnData](https://anndata.readthedocs.io/en/stable/index.html) and
 [SpatialData](https://spatialdata.scverse.org/en/latest/) objects.
 
-[AnnData](https://anndata.readthedocs.io/en/stable/index.html) provides is underlying data format
+[AnnData](https://anndata.readthedocs.io/en/stable/index.html) is the underlying data format
 of many packages of the [scverse](https://doi.org/10.1038/s41587-023-01733-8) such as
 [scanpy](https://scanpy.readthedocs.io/en/stable/) for single-cell data analysis and
 [squidpy](https://squidpy.readthedocs.io/en/stable/index.html) for spatial omics analysis.
