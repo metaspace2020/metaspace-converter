@@ -1,0 +1,7 @@
+metaspace\_converter.anndata\_to\_array module
+==============================================
+
+.. automodule:: metaspace_converter.anndata_to_array
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+metaspace\_converter.constants module
+=====================================
+
+.. automodule:: metaspace_converter.constants
+   :members:
+   :undoc-members:
+   :show-inheritance:
