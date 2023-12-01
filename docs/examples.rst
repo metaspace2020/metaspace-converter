@@ -66,7 +66,7 @@ convert previously downloaded AnnData objects to numpy arrays.
 
    ion_images = anndata_to_image_array(adata2)
 
-   # 6 ion images of shape 61x78
+   # 20 ion images of shape 130x143
    print(ion_images.shape)
 
 .. testoutput::
