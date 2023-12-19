@@ -5,6 +5,7 @@ from anndata import AnnData
 from scipy import ndimage
 
 from metaspace_converter.anndata_to_array import anndata_to_image_array
+from metaspace_converter.constants import COLOCALIZATION
 
 
 def colocML_preprocessing(
@@ -40,10 +41,16 @@ def colocML_preprocessing(
         None. The processed data is saved in ``layer``. If layer is net to None, ``adata.X`` will
         be overwritten
 
+    Raises:
+        ValueError: If no annotations are available in ``adata.X``.
+
     """
 
     # Extract image array from anndata:
     imarray = anndata_to_image_array(adata=adata)
+
+    if len(imarray) == 0:
+        raise ValueError("AnnData contains no annotations. ColocML preprocessing cannot be called.")
 
     # Median filtering
     imarray = ndimage.median_filter(imarray, size=(1, median_filter_size[0], median_filter_size[1]))
@@ -66,10 +73,10 @@ def colocalization(adata: AnnData, layer: Optional[str] = "colocml_preprocessing
     """
     Colocalization of ion images using the cosine similarity metric.
 
-    In combination with ``colocML_preprocessing`` this metric performed best in the
+    In combination with the ``colocML_preprocessing`` function, this metric performed best in the
     colocML publication (https://doi.org/10.1093/bioinformatics/btaa085).
 
-    We recommend to call the the ``colocML_preprocessing`` function beforehand.
+    It is recommended to call the the ``colocML_preprocessing`` function beforehand.
 
     Args:
         adata: An AnnData object.
@@ -78,21 +85,25 @@ def colocalization(adata: AnnData, layer: Optional[str] = "colocml_preprocessing
             data per default in ``adata.layer['colocml_preprocessing']``.
 
     Returns:
-        None. The processed data is saved in ``adata.uns['colocalization]``.
+        None. The processed data is saved in ``adata.uns['colocalization']``.
     """
 
+    # Select data
     if layer == None or layer not in adata.layers.keys():
-        data = adata.X.transpose()
+        data = np.array(adata.X).transpose()
     else:
-        data = adata.layers[layer].transpose()
+        data = np.array(adata.layers[layer]).transpose()
 
+    # Compute colocalization
     coloc = _pairwise_cosine_similarity(data)
 
-    adata.uns["colocalization"] = coloc
+    # Save colocalization
+    adata.uns[COLOCALIZATION] = coloc
 
 
 def _pairwise_cosine_similarity(data: np.ndarray) -> np.ndarray:
 
+    # Divide image vectors by euclidean norm
     norm_data = data / np.linalg.norm(data, axis=1, keepdims=True)
 
     # Compute pairwise cosine similarity

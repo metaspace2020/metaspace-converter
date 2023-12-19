@@ -114,3 +114,40 @@ Here using a reversed colormap which better represents intense values on bright 
 
 .. image:: ./_static/img/example_img_sd.png
    :alt: Visualization with SpatialData
+
+
+Colocalization Analysis
+-----------------------
+
+A popular type of analysis for imaging Mass Spectrometry data or spatial metabolomics 
+is colocalization analysis. 
+In the `ColocML`_ publication, 
+the authors evaluated data processing and colocalization metrics.
+Their best method (median filtering, quantile thresholding, and cosine similarity),
+can be executed with our package:
+
+.. testcode::
+
+   from metaspace_converter import metaspace_to_anndata, colocalization
+
+   # Download data
+   adata = metaspace_to_anndata(dataset_id="2023-11-14_21h58m39s", fdr=0.1)
+
+   # Perform median filtering and quantile thresholding
+   # The processed data is saved as a layer `adata.layers["colocml_preprocessing"]`
+   # It has the same dimensions as `adata.X`
+   colocalization.colocML_preprocessing(adata, layer="colocml_preprocessing")
+
+   # Compute the pairwise colocalization metrix between all ion images
+   # As an input, the processed data from `adata.layers["colocml_preprocessing"]` is used
+   # The colocalization matrix is saved in `adata.uns["colocalization"]`
+   colocalization.colocalization(adata, layer="colocml_preprocessing")
+
+.. testoutput::
+   :hide:
+
+   ...
+
+
+
+.. _ColocML: https://doi.org/10.1093/bioinformatics/btaa085
