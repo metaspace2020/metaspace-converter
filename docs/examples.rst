@@ -143,11 +143,6 @@ can be executed with our package:
    # The colocalization matrix is saved in `adata.uns["colocalization"]`
    colocalization.colocalization(adata, layer="colocml_preprocessing")
 
-.. testoutput::
-   :hide:
-
-   ...
-
 
 
 .. _ColocML: https://doi.org/10.1093/bioinformatics/btaa085
