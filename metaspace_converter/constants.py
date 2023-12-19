@@ -28,3 +28,5 @@ C: Final = "c"
 XY: Final = (X, Y)
 YX: Final = (Y, X)
 YXC: Final = (Y, X, C)
+
+COLOCALIZATION = "colocalization"

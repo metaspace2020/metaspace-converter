@@ -16,9 +16,11 @@ of many packages of the [scverse](https://doi.org/10.1038/s41587-023-01733-8) su
 [squidpy](https://squidpy.readthedocs.io/en/stable/index.html) for spatial omics analysis.
 
 Another supported format that is part of the [scverse](https://doi.org/10.1038/s41587-023-01733-8)
-is [SpatialData](https://spatialdata.scverse.org/en/latest/) for storing, aligning, and processing spatial omics data. 
+is [SpatialData](https://spatialdata.scverse.org/en/latest/) for storing, aligning, and processing spatial omics data.
 This enables users to easily align and integrate METASPACE datasets
 to other spatial omics modalities.
+
+Additionally, the commonly used colocalization analysis for spatial metabolomics can be performed with the package.
 
 If you encounter any bugs or have suggestions for new features, please open an issue in the
 [GitHub repository](https://github.com/metaspace2020/metaspace-converter).
@@ -28,6 +30,7 @@ If you encounter any bugs or have suggestions for new features, please open an i
 Our package requires `python >= 3.9`.
 
 You can install the package directly from [PyPI](https://pypi.org/project/metaspace-converter/):
+
 ```bash
 pip install metaspace-converter
 ```
@@ -160,7 +163,6 @@ sdata.points["maldi_points"] = sdata.transform_element_to_coordinate_system(
 ## License
 
 Unless specified otherwise in file headers or LICENSE files present in subdirectories, all files are licensed under the [Apache 2.0 license](https://github.com/metaspace2020/metaspace/blob/master/LICENSE).
-
 
 [badge-docs]: https://img.shields.io/github/actions/workflow/status/metaspace2020/metaspace-converter/docs.yml?label=documentation
 [badge-pypi]: https://img.shields.io/pypi/v/metaspace-converter
