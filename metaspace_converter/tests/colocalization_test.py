@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     import _pytest.fixtures
 
 from metaspace_converter import anndata_to_image_array
-from metaspace_converter.colocalization import colocalization, colocML_preprocessing
+from metaspace_converter.colocalization import colocalization, coloc_ml_preprocessing
 from metaspace_converter.constants import COL, COLOCALIZATION, METASPACE_KEY, X, Y
 from metaspace_converter.to_anndata import all_image_pixel_coordinates
 
@@ -46,26 +46,32 @@ def adata_dummy(request: "_pytest.fixtures.SubRequest") -> AnnData:
 )
 def test_colocml_preprocessing(adata_dummy):
 
-    COLOCML_LAYER = "colocml_preprocessing"
+    COLOCML_LAYER = "coloc_ml_preprocessing"
 
     adata = adata_dummy
 
     if adata.X.shape[1] == 0:
         with pytest.raises(ValueError) as e_info:
-            colocML_preprocessing(
+            coloc_ml_preprocessing(
                 adata, median_filter_size=(3, 3), quantile_threshold=0, layer=COLOCML_LAYER
             )
     else:
+        
 
         # Test median filtering
-        colocML_preprocessing(
+        coloc_ml_preprocessing(
             adata, median_filter_size=(3, 3), quantile_threshold=0, layer=COLOCML_LAYER
         )
 
         actual = anndata_to_image_array(adata)
 
-        # median filter
+        # Layer exists
+        assert COLOCML_LAYER in adata.layers.keys()
 
+        # Layer sizes match
+        assert adata.X.shape == adata.layers[COLOCML_LAYER].shape
+
+        # median filter
         expected_preprocessing = np.median(actual[0][:3, :3])
         observed = adata.layers[COLOCML_LAYER][adata.uns[METASPACE_KEY]["image_size"][X] + 1, 0]
         assert observed == expected_preprocessing
@@ -77,17 +83,13 @@ def test_colocml_preprocessing(adata_dummy):
         # Quantile thresholding
         adata.X[0].reshape(-1)
 
-        colocML_preprocessing(
+        coloc_ml_preprocessing(
             adata, median_filter_size=(3, 3), quantile_threshold=0.5, layer=COLOCML_LAYER
         )
 
         assert all(np.sum(adata.layers[COLOCML_LAYER] == 0, axis=0) <= 0.5 * adata.X.shape[0])
 
-        # Layer exists
-        assert COLOCML_LAYER in adata.layers.keys()
-
-        # Layer sizes match
-        assert adata.X.shape == adata.layers[COLOCML_LAYER].shape
+       
 
 
 def test_colocalization():
@@ -100,8 +102,8 @@ def test_colocalization():
 
     colocalization(adata, layer=None)
 
-    assert COLOCALIZATION in adata.uns.keys()
+    assert COLOCALIZATION in adata.varp.keys()
 
-    coloc = adata.uns[COLOCALIZATION]
+    coloc = adata.varp[COLOCALIZATION]
 
     assert np.all(coloc == expected)

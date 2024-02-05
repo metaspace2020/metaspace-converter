@@ -134,13 +134,13 @@ can be executed with our package:
    adata = metaspace_to_anndata(dataset_id="2023-11-14_21h58m39s", fdr=0.1)
 
    # Perform median filtering and quantile thresholding
-   # The processed data is saved as a layer `adata.layers["colocml_preprocessing"]`
+   # The processed data is saved as a layer `adata.layers["coloc_ml_preprocessing"]`
    # It has the same dimensions as `adata.X`
-   colocalization.colocML_preprocessing(adata, layer="colocml_preprocessing")
+   colocalization.coloc_ml_preprocessing(adata, layer="colocml_preprocessing")
 
-   # Compute the pairwise colocalization metrix between all ion images
-   # As an input, the processed data from `adata.layers["colocml_preprocessing"]` is used
-   # The colocalization matrix is saved in `adata.uns["colocalization"]`
+   # Compute the pairwise colocalization matrix between all ion images
+   # As an input, the processed data from `adata.layers["coloc_ml_preprocessing"]` is used
+   # The colocalization matrix is saved in `adata.varp["colocalization"]`
    colocalization.colocalization(adata, layer="colocml_preprocessing")
 
 

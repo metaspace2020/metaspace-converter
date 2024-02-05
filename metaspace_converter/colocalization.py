@@ -8,9 +8,9 @@ from metaspace_converter.anndata_to_array import anndata_to_image_array
 from metaspace_converter.constants import COLOCALIZATION
 
 
-def colocML_preprocessing(
+def coloc_ml_preprocessing(
     adata: AnnData,
-    layer: Optional[str] = "colocml_preprocessing",
+    layer: Optional[str] = "coloc_ml_preprocessing",
     median_filter_size: Tuple[int, int] = (3, 3),
     quantile_threshold: float = 0.5,
 ):
@@ -69,36 +69,41 @@ def colocML_preprocessing(
         adata.layers[layer] = imarray.transpose()
 
 
-def colocalization(adata: AnnData, layer: Optional[str] = "colocml_preprocessing"):
+def colocalization(adata: AnnData, layer: Optional[str] = "coloc_ml_preprocessing"):
     """
     Colocalization of ion images using the cosine similarity metric.
 
     In combination with the ``colocML_preprocessing`` function, this metric performed best in the
     colocML publication (https://doi.org/10.1093/bioinformatics/btaa085).
 
-    It is recommended to call the the ``colocML_preprocessing`` function beforehand.
+    It is recommended to call the the ``coloc_ml_preprocessing`` function beforehand.
 
     Args:
         adata: An AnnData object.
         layer: Key for ``adata.layer`` from which the ionimage_data for preprocessing taken.
-            If ``None``, ``adata.X`` is used. ``colocML_preprocessing`` will save the preprocessed
-            data per default in ``adata.layer['colocml_preprocessing']``.
+            If ``None``, ``adata.X`` is used. ``coloc_ml_preprocessing`` will save the preprocessed
+            data per default in ``adata.layer['coloc_ml_preprocessing']``.
 
     Returns:
-        None. The processed data is saved in ``adata.uns['colocalization']``.
+        None. The processed data is saved in ``adata.varp['colocalization']``.
+
+    Raises:
+        ValueError: If layer is not found in adata.layers.
     """
 
     # Select data
-    if layer == None or layer not in adata.layers.keys():
+    if layer is None:
         data = np.array(adata.X).transpose()
-    else:
+    elif layer in adata.layers.keys():
         data = np.array(adata.layers[layer]).transpose()
+    else:
+        raise ValueError(f"Layer `{layer}` not found in adata.layers.")
 
     # Compute colocalization
     coloc = _pairwise_cosine_similarity(data)
 
     # Save colocalization
-    adata.uns[COLOCALIZATION] = coloc
+    adata.varp[COLOCALIZATION] = coloc
 
 
 def _pairwise_cosine_similarity(data: np.ndarray) -> np.ndarray:
