@@ -72,13 +72,22 @@ def test_colocml_preprocessing(adata_dummy):
         assert adata.X.shape == adata.layers[COLOCML_LAYER].shape
 
         # median filter
-        expected_preprocessing = np.median(actual[0][:3, :3])
-        observed = adata.layers[COLOCML_LAYER][adata.uns[METASPACE_KEY]["image_size"][X] + 1, 0]
-        assert observed == expected_preprocessing
+        # Check that preprocessing was done correctly.
+        # Probe a single pixel of the resulting array and compute the expected median filter.
+        x = 1
+        y = 1
+        width = adata.uns[METASPACE_KEY]["image_size"][X]
+        expected_pixel_features = np.median(actual[:, y - 1:y + 2, x - 1:x + 2], axis=[1, 2])
+        actual_pixel_features = adata.layers[COLOCML_LAYER][y * width + x, :]
+        np.testing.assert_allclose(actual_pixel_features, expected_pixel_features)
 
-        expected_preprocessing = np.median(actual[1][:3, :3])
-        observed = adata.layers[COLOCML_LAYER][adata.uns[METASPACE_KEY]["image_size"][X] + 1, 1]
-        assert observed == expected_preprocessing
+        # expected_preprocessing = np.median(actual[0][:3, :3])
+        # observed = adata.layers[COLOCML_LAYER][adata.uns[METASPACE_KEY]["image_size"][X] + 1, 0]
+        # assert observed == expected_preprocessing
+
+        # expected_preprocessing = np.median(actual[1][:3, :3])
+        # observed = adata.layers[COLOCML_LAYER][adata.uns[METASPACE_KEY]["image_size"][X] + 1, 1]
+        # assert observed == expected_preprocessing
 
         # Quantile thresholding
 
