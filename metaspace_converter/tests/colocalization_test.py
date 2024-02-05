@@ -39,8 +39,8 @@ def adata_dummy(request: "_pytest.fixtures.SubRequest") -> AnnData:
     "adata_dummy",
     [
         dict(num_ions=5, height=10, width=10),
-        dict(num_ions=0, height=2, width=3),
-        dict(num_ions=4, height=4, width=4),
+        dict(num_ions=0, height=10, width=10),
+        dict(num_ions=5, height=3, width=4),
     ],
     indirect=["adata_dummy"],
 )
@@ -81,7 +81,6 @@ def test_colocml_preprocessing(adata_dummy):
         assert observed == expected_preprocessing
 
         # Quantile thresholding
-        adata.X[0].reshape(-1)
 
         coloc_ml_preprocessing(
             adata, median_filter_size=(3, 3), quantile_threshold=0.5, layer=COLOCML_LAYER
