@@ -18,11 +18,12 @@ def coloc_ml_preprocessing(
     Preprocessing for colocalization analysis according to the colocML publication
     (https://doi.org/10.1093/bioinformatics/btaa085).
 
-    In the publication the authors evaluated colocalization metrics and preprocessing approaches.
+    In the publication, the authors evaluated colocalization metrics and preprocessing approaches.
     They found the best performance for
-    1) median filtering of ion images with a (3, 3) kernel size and
-    2) quantile thresholding ad 50%, meaning all pixels with intensities below the 50%
-    quantile set to 0.
+
+    1. median filtering of ion images with a (3, 3) kernel size and
+    2. quantile thresholding at 50%, meaning all pixels with intensities below the 50%
+       quantile set to 0.
 
     This function performs the same preprocessing steps.
     Recommended for call before running the ``colocalization`` function.
@@ -76,7 +77,7 @@ def colocalization(adata: AnnData, layer: Optional[str] = "coloc_ml_preprocessin
     In combination with the ``colocML_preprocessing`` function, this metric performed best in the
     colocML publication (https://doi.org/10.1093/bioinformatics/btaa085).
 
-    It is recommended to call the the ``coloc_ml_preprocessing`` function beforehand.
+    It is recommended to call the ``coloc_ml_preprocessing`` function beforehand.
 
     Args:
         adata: An AnnData object.
