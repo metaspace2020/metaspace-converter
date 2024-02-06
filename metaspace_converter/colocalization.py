@@ -20,9 +20,10 @@ def coloc_ml_preprocessing(
 
     In the publication, the authors evaluated colocalization metrics and preprocessing approaches.
     They found the best performance for
-    1) median filtering of ion images with a (3, 3) kernel size and
-    2) quantile thresholding at 50%, meaning all pixels with intensities below the 50%
-    quantile set to 0.
+
+    1. median filtering of ion images with a (3, 3) kernel size and
+    2. quantile thresholding at 50%, meaning all pixels with intensities below the 50%
+       quantile set to 0.
 
     This function performs the same preprocessing steps.
     Recommended for call before running the ``colocalization`` function.
