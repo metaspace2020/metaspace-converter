@@ -38,7 +38,7 @@ def coloc_ml_preprocessing(
             ion image and all pixels below the quantile threshold will be set to 0.
 
     Returns:
-        None. The processed data is saved in ``layer``. If layer is net to None, ``adata.X`` will
+        None. The processed data is saved in ``layer``. If layer is set to None, ``adata.X`` will
         be overwritten
 
     Raises:
