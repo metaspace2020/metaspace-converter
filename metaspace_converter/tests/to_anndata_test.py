@@ -61,6 +61,8 @@ def test_metaspace_to_anndata(
     dataset = sm.dataset(id=dataset_id)
     assert actual.n_obs == np.prod(get_ion_image_shape(dataset))
     assert actual.n_vars == len(dataset.annotations(fdr=fdr, database=database))
+    assert actual.obs_names.is_unique
+    assert actual.var_names.is_unique
     assert {
         COL.ion_image_shape_y,
         COL.ion_image_shape_x,
