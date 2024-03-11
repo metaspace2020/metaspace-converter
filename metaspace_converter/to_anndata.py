@@ -92,7 +92,14 @@ def metaspace_to_anndata(
         database = DEFAULT_DATABASE
 
     # Download annotations
-    annotations = dataset.results(database=database, fdr=fdr, **annotation_filter)
+    annotations = dataset.results(
+        database=database,
+        fdr=fdr,
+        include_chem_mods=True,
+        include_neutral_losses=True,
+        **annotation_filter,
+    )
+    annotations = _add_annotations_index(annotations, index_name=VAR_INDEX_NAME)
     annotations = _normalize_annotations_for_serialization(annotations)
 
     # Download ion images
@@ -108,21 +115,7 @@ def metaspace_to_anndata(
             f"No isotope images available for dataset {dataset.id} and database "
             f"{database[0]} – {database[1]}. Was the database selected for processing on METASPACE?"
         )
-    # Isotope images are also specific to neutral loss and chemical modification (if any)
-    # whereas annotations only include formula and adduct. Thus there can be a mismatch.
-    # Since we want to keep all isotope images, we add missing rows to annotations
-    isotope_images_index = pd.DataFrame(
-        [(img.formula, img.adduct, img.chem_mod, img.neutral_loss) for img in isotope_images],
-        columns=["formula", "adduct", "chem_mod", "neutral_loss"],
-    )
-    annotations = pd.merge(
-        annotations,
-        isotope_images_index,
-        how="inner",
-        left_on=("formula", "adduct"),
-        right_on=("formula", "adduct"),
-    )
-    annotations = _add_annotations_index(annotations, index_name=VAR_INDEX_NAME)
+    assert len(annotations) == len(isotope_images)
 
     # Sort isotope images to match the annotations.
     isotope_images = _sort_isotope_images_like(isotope_images, annotations)
@@ -229,7 +222,7 @@ def _sort_isotope_images_like(
     # Return them in the requested order.
     # Note: pd.DataFrame.itertuples yields NamedTuple and is faster than iterrows.
     return [
-        images_dict[(row.formula, row.adduct, row.chem_mod, row.neutral_loss)]
+        images_dict[(row.formula, row.adduct, row.chemMod, row.neutralLoss)]
         for row in df.itertuples(index=False)
     ]
 
