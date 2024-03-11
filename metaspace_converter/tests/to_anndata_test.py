@@ -36,9 +36,14 @@ def sm(metaspace_credentials) -> SMInstance:
 @pytest.mark.parametrize(
     ("dataset_id", "database", "fdr", "metadata_as_obs", "add_optical_image"),
     [
+        # Just downloading, metadata as uns
         ("2021-09-03_11h43m13s", ("CoreMetabolome", "v3"), 0.1, False, False),
+        # Metadata as obs
         ("2021-09-03_11h43m13s", ("CoreMetabolome", "v3"), 0.1, True, False),
+        # Add optical image for SquidPy
         ("2021-09-03_11h43m13s", ("CoreMetabolome", "v3"), 0.1, False, True),
+        # Dataset with custom database, neutral losses
+        ("2022-11-18_16h40m47s", ("AE_spacem_tests", "v1"), 0.5, False, False),
     ],
 )
 def test_metaspace_to_anndata(
