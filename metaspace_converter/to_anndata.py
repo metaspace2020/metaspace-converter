@@ -92,7 +92,13 @@ def metaspace_to_anndata(
         database = DEFAULT_DATABASE
 
     # Download annotations
-    annotations = dataset.results(database=database, fdr=fdr, **annotation_filter)
+    annotations = dataset.results(
+        database=database,
+        fdr=fdr,
+        include_chem_mods=True,
+        include_neutral_losses=True,
+        **annotation_filter,
+    )
     annotations = _add_annotations_index(annotations, index_name=VAR_INDEX_NAME)
     annotations = _normalize_annotations_for_serialization(annotations)
 
@@ -111,8 +117,8 @@ def metaspace_to_anndata(
         )
     assert len(annotations) == len(isotope_images)
 
-    # Sort them matching the annotations.
-    isotope_images = _sort_isotope_images_like(isotope_images, annotations.index)
+    # Sort isotope images to match the annotations.
+    isotope_images = _sort_isotope_images_like(isotope_images, annotations)
 
     # Create X matrix (all ion pixels flattened to primary axis)
     shape = get_ion_image_shape(dataset)
@@ -146,13 +152,20 @@ def metaspace_to_anndata(
     return adata
 
 
-def create_annotation_id(formula: str, adduct: str) -> str:
-    return f"{formula}{adduct}"
+def create_annotation_id(
+    formula: str, adduct: str, chem_mod: str = "", neutral_loss: str = ""
+) -> str:
+    return f"{formula}{adduct}{chem_mod}{neutral_loss}"
 
 
 def _add_annotations_index(df: pd.DataFrame, index_name: str = VAR_INDEX_NAME) -> pd.DataFrame:
     df = df.reset_index()
-    df[index_name] = df.apply(lambda row: create_annotation_id(row.formula, row.adduct), axis=1)
+    df[index_name] = df.apply(
+        lambda row: create_annotation_id(
+            row.formula, row.adduct, getattr(row, "chemMod", ""), getattr(row, "neutralLoss", "")
+        ),
+        axis=1,
+    )
     return df.set_index(index_name)
 
 
@@ -201,14 +214,17 @@ def get_ion_image_shape(
 
 
 def _sort_isotope_images_like(
-    isotope_images: list[IsotopeImages], index: pd.Index
+    isotope_images: list[IsotopeImages], df: pd.DataFrame
 ) -> list[IsotopeImages]:
-    images_dict = {}
-    for isotope_image in isotope_images:
-        annotation_id = create_annotation_id(isotope_image.formula, isotope_image.adduct)
-        images_dict[annotation_id] = isotope_image
+    images_dict = {
+        (img.formula, img.adduct, img.chem_mod, img.neutral_loss): img for img in isotope_images
+    }
     # Return them in the requested order.
-    return [images_dict[key] for key in index]
+    # Note: pd.DataFrame.itertuples yields NamedTuple and is faster than iterrows.
+    return [
+        images_dict[(row.formula, row.adduct, row.chemMod, row.neutralLoss)]
+        for row in df.itertuples(index=False)
+    ]
 
 
 def _create_anndata_x(isotope_images: list[IsotopeImages], shape: Shape2d) -> np.ndarray:
