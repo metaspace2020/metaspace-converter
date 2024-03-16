@@ -1,0 +1,7 @@
+metaspace\_converter.colocalization module
+==========================================
+
+.. automodule:: metaspace_converter.colocalization
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,23 @@
+metaspace\_converter package
+============================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   metaspace_converter.anndata_to_array
+   metaspace_converter.colocalization
+   metaspace_converter.constants
+   metaspace_converter.to_anndata
+   metaspace_converter.to_spatialdata
+   metaspace_converter.utils
+
+Module contents
+---------------
+
+.. automodule:: metaspace_converter
+   :members:
+   :undoc-members:
+   :show-inheritance:

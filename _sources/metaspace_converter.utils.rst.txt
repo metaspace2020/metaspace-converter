@@ -1,0 +1,7 @@
+metaspace\_converter.utils module
+=================================
+
+.. automodule:: metaspace_converter.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
