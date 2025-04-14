@@ -9,3 +9,5 @@ __all__ = [
     "anndata_to_image_array",
     "colocalization",
 ]
+
+__version__ = "1.1.1"
