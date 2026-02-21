@@ -30,14 +30,14 @@ dependencies = [
     "metaspace2020>=2.0.6",
     "numpy",
     "pandas",
-    "spatial-image>=0.3",
-    "spatialdata>=0.1.0",
+    "spatial-image>=1.0.0",
+    "spatialdata>=0.2.1",
 ]
 dynamic = ["readme"]
 
 [project.optional-dependencies]
 test = [
-    "multiscale-spatial-image>=0.11",
+    "multiscale-spatial-image>=1.0.0",
     "pytest>=7.2",
     "pytest-cov>=4.1",
 ]

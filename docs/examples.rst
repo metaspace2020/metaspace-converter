@@ -92,7 +92,7 @@ Here using a reversed colormap which better represents intense values on bright 
 
    # Workaround: spatialdata-plot currently does not use points transformation
    sdata.points["maldi_points"] = sdata.transform_element_to_coordinate_system(
-       sdata.points["maldi_points"], "global"
+       "maldi_points", "global"
    )
 
    (

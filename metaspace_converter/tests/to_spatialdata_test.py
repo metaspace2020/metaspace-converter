@@ -72,7 +72,7 @@ def test_metaspace_to_spatialdata(
     if add_optical_image and add_points:
         # All points should be positioned within the image bounds.
         points_over_image = actual.transform_element_to_coordinate_system(
-            actual.points[points_name_added], target_coordinate_system=COORD_SYS_GLOBAL
+            points_name_added, target_coordinate_system=COORD_SYS_GLOBAL
         )[[Y, X]].compute()
         image_min = (0, 0)
         image_max = _get_image_shape(actual.images[optical_name_added])
