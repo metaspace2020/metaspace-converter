@@ -48,18 +48,18 @@ def test_metaspace_to_spatialdata(
     )
 
     # Check table
-    assert actual.table is not None
+    assert "table" in actual.tables
     dataset = sm.dataset(id=dataset_id)
-    assert actual.table.n_obs == np.prod(get_ion_image_shape(dataset))
-    assert actual.table.n_vars == len(dataset.annotations(fdr=fdr, database=database))
+    assert actual.tables["table"].n_obs == np.prod(get_ion_image_shape(dataset))
+    assert actual.tables["table"].n_vars == len(dataset.annotations(fdr=fdr, database=database))
     assert {
         COL.ion_image_shape_y,
         COL.ion_image_shape_x,
         COL.ion_image_pixel_y,
         COL.ion_image_pixel_x,
-    }.issubset(actual.table.obs.columns)
-    assert np.all(actual.table.var["fdr"] <= fdr)
-    actual_database = actual.table.uns[METASPACE_KEY]["metaspace_to_anndata_parameters"]["database"]
+    }.issubset(actual.tables["table"].obs.columns)
+    assert np.all(actual.tables["table"].var["fdr"] <= fdr)
+    actual_database = actual.tables["table"].uns[METASPACE_KEY]["metaspace_to_anndata_parameters"]["database"]
     assert actual_database == list(database)
 
     # Check optical image, if requested

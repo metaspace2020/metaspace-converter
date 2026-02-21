@@ -31,7 +31,7 @@ dependencies = [
     "numpy",
     "pandas",
     "spatial-image>=0.3",
-    "spatialdata>=0.0.15",
+    "spatialdata>=0.1.0",
 ]
 dynamic = ["readme"]
 

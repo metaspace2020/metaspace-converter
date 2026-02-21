@@ -101,7 +101,7 @@ def metaspace_to_spatialdata(
         **annotation_filter,
     )
     table = _create_spatialdata_table(adata)
-    sdata = SpatialData(table=table)
+    sdata = SpatialData(tables={"table": table})
 
     # Create image
     if has_optical_image(dataset) and add_optical_image:
