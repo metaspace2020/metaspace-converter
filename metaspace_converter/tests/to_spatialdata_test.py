@@ -1,5 +1,6 @@
 import numpy as np
 import pytest
+import xarray as xr
 from multiscale_spatial_image import MultiscaleSpatialImage
 
 from metaspace_converter.constants import COORD_SYS_GLOBAL, OPTICAL_IMAGE_KEY, POINTS_KEY, X, Y
@@ -83,7 +84,7 @@ def test_metaspace_to_spatialdata(
 
 
 def _get_image_shape(image: MultiscaleSpatialImage) -> tuple[int, int]:
-    assert isinstance(image, MultiscaleSpatialImage)
+    assert isinstance(image, xr.DataTree)
     sizes = image["scale0"].sizes
     return sizes["y"], sizes["x"]
 
