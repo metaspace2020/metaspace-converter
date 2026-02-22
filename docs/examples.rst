@@ -111,11 +111,6 @@ Here using a reversed colormap which better represents intense values on bright 
        .pl.show(title=sdata.tables["table"].var.index[0], coordinate_systems="global")
    )
 
-.. testoutput::
-   :hide:
-
-   ...
-
 .. image:: ./_static/img/example_img_sd.png
    :alt: Visualization with SpatialData
 
