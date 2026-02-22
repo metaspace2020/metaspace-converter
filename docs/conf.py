@@ -66,7 +66,7 @@ html_theme = "sphinx_rtd_theme"
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
 
-# Doctest allows to execute example code with directives "" using "make doctest".
+# Doctest allows to execute example code with directives "testcode" using "make doctest".
 # Compared to the Python standard library module, this extension detects code blocks
 # without requiring ">>> " as prefix.
 # Remove doctest flags within the examples ("#doctest: +SKIP"), not to distract readers.
