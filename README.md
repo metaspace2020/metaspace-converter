@@ -149,12 +149,12 @@ sdata.points["maldi_points"] = sdata.transform_element_to_coordinate_system(
     sdata.pl.render_images("optical_image")
     .pl.render_points(
         "maldi_points",
-        color=sdata.table.var.index[0],
+        color=sdata.tables["table"].var.index[0],
         alpha=1,
         size=2,
         cmap="viridis_r",
     )
-    .pl.show(title=sdata.table.var.index[0], coordinate_systems="global")
+    .pl.show(title=sdata.tables["table"].var.index[0], coordinate_systems="global")
 )
 ```
 
