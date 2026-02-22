@@ -31,7 +31,11 @@ Plain AnnData with ScanPy
 SquidPy
 -------
 
+.. note:: Example may not work
+   SquidPy (0.4.1) is not anymore compatible with the dependencies used in this project.
+
 .. testcode::
+   :skipif: True
 
    from metaspace_converter import metaspace_to_anndata
    import squidpy as sq

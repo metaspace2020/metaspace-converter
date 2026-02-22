@@ -43,6 +43,7 @@ test = [
     "scikit-image>=0.22", # Avoid binary incompatibility with Numpy 2.0
 ]
 docs = [
+    "anndata~=0.12.10",
     "sphinx~=7.2",
     "sphinx-autodoc-typehints",
     "sphinx-codeautolink",
@@ -52,9 +53,9 @@ docs = [
 #    "myst-nb",
 #    "ipython~=8.6.0",
     # For example code in documentation
-    "scanpy~=1.9.6",
+    "scanpy~=1.11.5",
     "spatialdata-plot~=0.2.9",
-    "squidpy~=1.4.1",
+    #"squidpy~=1.4.1", # Has not been updated to anndata>0.10.9, which is incompatible with SpatialData
 ]
 
 [project.urls]
