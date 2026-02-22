@@ -19,6 +19,7 @@ from metaspace_converter.constants import (
     OPTICAL_IMAGE_KEY,
     POINTS_KEY,
     REGION_KEY,
+    TABLE_KEY,
     XY,
     YX,
     YXC,
@@ -40,6 +41,7 @@ def metaspace_to_spatialdata(
     optical_name_added: str = OPTICAL_IMAGE_KEY,
     add_points: bool = True,
     points_name_added: str = POINTS_KEY,
+    table_name: str = TABLE_KEY,
     sm: Optional[SMInstance] = None,
     **annotation_filter,
 ) -> SpatialData:
@@ -67,7 +69,8 @@ def metaspace_to_spatialdata(
         add_points: Whether to also add ion image pixel coordinates as SpatialData points. This
             allows to spatially visualize the ion image values. If False, only ion intensities are
             added to the table and coordinates are added to ``obs``.
-        points_name_added: Name of the element where to store the points in the SpatialData object
+        points_name: Name of the element where to store the points in the SpatialData object
+        table_name_added: The name for the SpatialData table to which annotations will be saved.
         sm: Optionally a cached SMInstance
         annotation_filter: Additional keyword arguments passed to the METASPACE API.
 
@@ -101,7 +104,7 @@ def metaspace_to_spatialdata(
         **annotation_filter,
     )
     table = _create_spatialdata_table(adata)
-    sdata = SpatialData(table=table)
+    sdata = SpatialData(tables={table_name: table})
 
     # Create image
     if has_optical_image(dataset) and add_optical_image:

@@ -1,5 +1,6 @@
 import numpy as np
 import pytest
+import xarray as xr
 from multiscale_spatial_image import MultiscaleSpatialImage
 
 from metaspace_converter.constants import COORD_SYS_GLOBAL, OPTICAL_IMAGE_KEY, POINTS_KEY, X, Y
@@ -48,18 +49,18 @@ def test_metaspace_to_spatialdata(
     )
 
     # Check table
-    assert actual.table is not None
+    assert "table" in actual.tables
     dataset = sm.dataset(id=dataset_id)
-    assert actual.table.n_obs == np.prod(get_ion_image_shape(dataset))
-    assert actual.table.n_vars == len(dataset.annotations(fdr=fdr, database=database))
+    assert actual.tables["table"].n_obs == np.prod(get_ion_image_shape(dataset))
+    assert actual.tables["table"].n_vars == len(dataset.annotations(fdr=fdr, database=database))
     assert {
         COL.ion_image_shape_y,
         COL.ion_image_shape_x,
         COL.ion_image_pixel_y,
         COL.ion_image_pixel_x,
-    }.issubset(actual.table.obs.columns)
-    assert np.all(actual.table.var["fdr"] <= fdr)
-    actual_database = actual.table.uns[METASPACE_KEY]["metaspace_to_anndata_parameters"]["database"]
+    }.issubset(actual.tables["table"].obs.columns)
+    assert np.all(actual.tables["table"].var["fdr"] <= fdr)
+    actual_database = actual.tables["table"].uns[METASPACE_KEY]["metaspace_to_anndata_parameters"]["database"]
     assert actual_database == list(database)
 
     # Check optical image, if requested
@@ -72,7 +73,7 @@ def test_metaspace_to_spatialdata(
     if add_optical_image and add_points:
         # All points should be positioned within the image bounds.
         points_over_image = actual.transform_element_to_coordinate_system(
-            actual.points[points_name_added], target_coordinate_system=COORD_SYS_GLOBAL
+            points_name_added, target_coordinate_system=COORD_SYS_GLOBAL
         )[[Y, X]].compute()
         image_min = (0, 0)
         image_max = _get_image_shape(actual.images[optical_name_added])
@@ -83,7 +84,7 @@ def test_metaspace_to_spatialdata(
 
 
 def _get_image_shape(image: MultiscaleSpatialImage) -> tuple[int, int]:
-    assert isinstance(image, MultiscaleSpatialImage)
+    assert isinstance(image, xr.DataTree)
     sizes = image["scale0"].sizes
     return sizes["y"], sizes["x"]
 
