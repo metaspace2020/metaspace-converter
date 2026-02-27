@@ -4,7 +4,6 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "metaspace-converter"
-version = "1.1.2"
 authors = [
     {name = "Tim Daniel Rose", email = "tim.rose@embl.de"},
     {name = "Andreas Eisenbarth", email = "andreas.eisenbarth@embl.de"},
@@ -33,7 +32,7 @@ dependencies = [
     "spatial-image>=1.1.0",
     "spatialdata>=0.7.2",
 ]
-dynamic = ["readme"]
+dynamic = ["readme", "version"]
 
 [project.optional-dependencies]
 test = [
@@ -71,6 +70,7 @@ where = ["."]
 "*" = ["metaspace_converter/tests"]
 
 [tool.setuptools.dynamic]
+version = {attr = "metaspace_converter.__version__"}  
 readme = {file = "README.md", content-type = "text/markdown"}
 
 [tool.black]
