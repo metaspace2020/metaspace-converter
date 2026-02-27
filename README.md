@@ -27,7 +27,7 @@ If you encounter any bugs or have suggestions for new features, please open an i
 
 ## Installation
 
-Our package requires `python >= 3.9`.
+Our package requires `python >= 3.11`.
 
 You can install the package directly from [PyPI](https://pypi.org/project/metaspace-converter/):
 
