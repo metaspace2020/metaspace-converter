@@ -1,0 +1,303 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>metaspace_converter.utils &mdash; METASPACE Converter  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-codeautolink.css?v=b2176991" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            METASPACE Converter
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">METASPACE Converter</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">metaspace_converter.utils</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for metaspace_converter.utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dataclasses</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Sequence</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Iterable</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">metaspace.sm_annotation_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">SMDataset</span>
+
+
+<div class="viewcode-block" id="empty_columns_to_nan">
+<a class="viewcode-back" href="../../metaspace_converter.utils.html#metaspace_converter.utils.empty_columns_to_nan">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">empty_columns_to_nan</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts all empty columns from None (dtype object) to NaN (dtype float).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        df: A dataframe</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The modified dataframe. The original dataframe is modified, not a copy.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">infer_dtype</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">c</span><span class="p">])</span> <span class="o">==</span> <span class="s2">&quot;empty&quot;</span><span class="p">:</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="k">return</span> <span class="n">df</span></div>
+
+
+
+<div class="viewcode-block" id="has_optical_image">
+<a class="viewcode-back" href="../../metaspace_converter.utils.html#metaspace_converter.utils.has_optical_image">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">has_optical_image</span><span class="p">(</span><span class="n">dataset</span><span class="p">:</span> <span class="n">SMDataset</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check whether a METASPACE dataset has an optical image</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">optical_images</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">optical_images</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="n">optical_images</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">optical_images</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span></div>
+
+
+
+<div class="viewcode-block" id="is_non_str_sequence">
+<a class="viewcode-back" href="../../metaspace_converter.utils.html#metaspace_converter.utils.is_non_str_sequence">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">is_non_str_sequence</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns whether an object is a sequence (list and similar), excluding strings.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        obj: The object to check.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        True if the object is a sequence.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="iter_property_paths">
+<a class="viewcode-back" href="../../metaspace_converter.utils.html#metaspace_converter.utils.iter_property_paths">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">iter_property_paths</span><span class="p">(</span>
+    <span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="n">delimiter</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span><span class="p">,</span>
+    <span class="n">include_none</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">dont_traverse_types</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">type</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(),</span>
+    <span class="n">dont_descend_paths</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(),</span>
+    <span class="n">_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Iterates recursively over properties of nested objects.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        obj: A class instance, mapping or sequence.</span>
+<span class="sd">        delimiter: The delimiter to use. Should not be contained in any name.</span>
+<span class="sd">        include_none: Whether to yield attributes which have None assigned, or skip them.</span>
+<span class="sd">        dont_traverse_types: Iterable data types which should not be traversed any deeper.</span>
+<span class="sd">            These are yielded as values.</span>
+<span class="sd">        dont_descend_paths: Paths with iterable objects that should be preserved.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        An iterator for iterating over paths and objects found at each path. It can also be</span>
+<span class="sd">        converted to a dictionary.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">prefix</span> <span class="o">=</span> <span class="n">_path</span> <span class="k">if</span> <span class="n">_path</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">_path</span><span class="si">}{</span><span class="n">delimiter</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">if</span> <span class="n">dont_traverse_types</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">dont_traverse_types</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">include_none</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">yield</span> <span class="n">_path</span><span class="p">,</span> <span class="n">obj</span>
+    <span class="k">elif</span> <span class="n">_path</span> <span class="ow">in</span> <span class="n">dont_descend_paths</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">include_none</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">yield</span> <span class="n">_path</span><span class="p">,</span> <span class="n">obj</span>
+    <span class="c1"># Traversable types: list, dict, dataclasses/pydantic</span>
+    <span class="k">elif</span> <span class="n">is_non_str_sequence</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+            <span class="k">yield from</span> <span class="n">iter_property_paths</span><span class="p">(</span>
+                <span class="n">value</span><span class="p">,</span>
+                <span class="n">delimiter</span><span class="o">=</span><span class="n">delimiter</span><span class="p">,</span>
+                <span class="n">include_none</span><span class="o">=</span><span class="n">include_none</span><span class="p">,</span>
+                <span class="n">dont_traverse_types</span><span class="o">=</span><span class="n">dont_traverse_types</span><span class="p">,</span>
+                <span class="n">dont_descend_paths</span><span class="o">=</span><span class="n">dont_descend_paths</span><span class="p">,</span>
+                <span class="n">_path</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prefix</span><span class="si">}{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">yield from</span> <span class="n">iter_property_paths</span><span class="p">(</span>
+                <span class="n">value</span><span class="p">,</span>
+                <span class="n">delimiter</span><span class="o">=</span><span class="n">delimiter</span><span class="p">,</span>
+                <span class="n">include_none</span><span class="o">=</span><span class="n">include_none</span><span class="p">,</span>
+                <span class="n">dont_traverse_types</span><span class="o">=</span><span class="n">dont_traverse_types</span><span class="p">,</span>
+                <span class="n">dont_descend_paths</span><span class="o">=</span><span class="n">dont_descend_paths</span><span class="p">,</span>
+                <span class="n">_path</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prefix</span><span class="si">}{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">is_dataclass</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><span class="n">obj</span><span class="p">)]</span>
+            <span class="k">if</span> <span class="n">is_dataclass</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+            <span class="k">else</span> <span class="n">obj</span><span class="o">.</span><span class="n">__fields__</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+            <span class="c1"># Object with attributes</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+            <span class="k">yield from</span> <span class="n">iter_property_paths</span><span class="p">(</span>
+                <span class="n">value</span><span class="p">,</span>
+                <span class="n">delimiter</span><span class="o">=</span><span class="n">delimiter</span><span class="p">,</span>
+                <span class="n">include_none</span><span class="o">=</span><span class="n">include_none</span><span class="p">,</span>
+                <span class="n">dont_traverse_types</span><span class="o">=</span><span class="n">dont_traverse_types</span><span class="p">,</span>
+                <span class="n">dont_descend_paths</span><span class="o">=</span><span class="n">dont_descend_paths</span><span class="p">,</span>
+                <span class="n">_path</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prefix</span><span class="si">}{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+    <span class="c1"># Non-traversable/primitive types</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">include_none</span><span class="p">:</span>
+            <span class="c1"># Don&#39;t yield values that are not set.</span>
+            <span class="k">return</span>
+        <span class="k">yield</span> <span class="n">_path</span><span class="p">,</span> <span class="n">obj</span></div>
+
+
+
+<div class="viewcode-block" id="stringify_list_columns">
+<a class="viewcode-back" href="../../metaspace_converter.utils.html#metaspace_converter.utils.stringify_list_columns">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">stringify_list_columns</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">columns</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(),</span> <span class="nb">all</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    If the dataframe column is a list, stringify it into JSON.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        df: A dataframe with a column that contains lists (e.g. of molecule names)</span>
+<span class="sd">        columns: The names of the columns containing lists</span>
+<span class="sd">        all: Whether to check and stringify all columns containing list-like objects</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A dataframe where all values in specified columns are JSON stringified.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">all</span><span class="p">:</span>
+            <span class="n">columns</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span>
+        <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">is_list_like</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                <span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">l</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">l</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">df</span></div>
+
+
+
+<div class="viewcode-block" id="transform_coords">
+<a class="viewcode-back" href="../../metaspace_converter.utils.html#metaspace_converter.utils.transform_coords">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">transform_coords</span><span class="p">(</span><span class="n">coords</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">transform_matrix_2d</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Transform a list of 2D coordinates using a 3×3 transformation matrix.</span>
+
+<span class="sd">    Like in scikit-image, but without adding that dependency.</span>
+
+<span class="sd">    See skimage.transform._geometric.ProjectiveTransform.__call__</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        coords: An array of coordinates with shape (number of points, 2)</span>
+<span class="sd">        transform_matrix_2d: A transformation matrix of shape (3, 3)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The list of transformed coordinates as Numpy array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># From skimage.transform._geometric</span>
+    <span class="c1"># Convert to homogeneous coordinates</span>
+    <span class="n">src_h</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">coords</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">coords</span><span class="p">),</span> <span class="mi">1</span><span class="p">))])</span>
+    <span class="n">dst_h</span> <span class="o">=</span> <span class="n">src_h</span> <span class="o">@</span> <span class="n">transform_matrix_2d</span><span class="o">.</span><span class="n">T</span>
+    <span class="c1"># Below, we will divide by the last dimension of the homogeneous</span>
+    <span class="c1"># coordinate matrix. In order to avoid division by zero,</span>
+    <span class="c1"># we replace exact zeros in this column with a very small number.</span>
+    <span class="n">dst_h</span><span class="p">[</span><span class="n">dst_h</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span>
+    <span class="c1"># rescale to homogeneous coordinates</span>
+    <span class="n">dst</span> <span class="o">=</span> <span class="n">dst_h</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">dst_h</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="k">return</span> <span class="n">dst</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023; Tim Daniel Rose, Andreas Eisenbarth, Theodore Alexandrov.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

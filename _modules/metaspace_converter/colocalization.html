@@ -1,0 +1,230 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>metaspace_converter.colocalization &mdash; METASPACE Converter  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-codeautolink.css?v=b2176991" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            METASPACE Converter
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">METASPACE Converter</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">metaspace_converter.colocalization</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for metaspace_converter.colocalization</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">anndata</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnnData</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ndimage</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">metaspace_converter.anndata_to_array</span><span class="w"> </span><span class="kn">import</span> <span class="n">anndata_to_image_array</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">metaspace_converter.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">COLOCALIZATION</span>
+
+
+<div class="viewcode-block" id="coloc_ml_preprocessing">
+<a class="viewcode-back" href="../../metaspace_converter.colocalization.html#metaspace_converter.colocalization.coloc_ml_preprocessing">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">coloc_ml_preprocessing</span><span class="p">(</span>
+    <span class="n">adata</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">,</span>
+    <span class="n">layer</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;coloc_ml_preprocessing&quot;</span><span class="p">,</span>
+    <span class="n">median_filter_size</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+    <span class="n">quantile_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Preprocessing for colocalization analysis according to the colocML publication</span>
+<span class="sd">    (https://doi.org/10.1093/bioinformatics/btaa085).</span>
+
+<span class="sd">    In the publication, the authors evaluated colocalization metrics and preprocessing approaches.</span>
+<span class="sd">    They found the best performance for</span>
+
+<span class="sd">    1. median filtering of ion images with a (3, 3) kernel size and</span>
+<span class="sd">    2. quantile thresholding at 50%, meaning all pixels with intensities below the 50%</span>
+<span class="sd">       quantile set to 0.</span>
+
+<span class="sd">    This function performs the same preprocessing steps.</span>
+<span class="sd">    Recommended for call before running the ``colocalization`` function.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        adata: An AnnData object.</span>
+<span class="sd">        layer: Key for the adata.layers dict in which the processed data will be saved.</span>
+<span class="sd">            Default value is ``colocml_preprocessing``.</span>
+<span class="sd">            If None, ``adata.X`` will be overwritten with the processed data.</span>
+<span class="sd">        median_filter_size: 2-dimensional filter size for the median filtering that</span>
+<span class="sd">            will be performed per ion image.</span>
+<span class="sd">        quantile_threshold: Float between 0 and 1. The function computes the quantile value per</span>
+<span class="sd">            ion image and all pixels below the quantile threshold will be set to 0.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        None. The processed data is saved in ``layer``. If layer is set to None, ``adata.X`` will</span>
+<span class="sd">        be overwritten</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If no annotations are available in ``adata.X``.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Extract image array from anndata:</span>
+    <span class="n">imarray</span> <span class="o">=</span> <span class="n">anndata_to_image_array</span><span class="p">(</span><span class="n">adata</span><span class="o">=</span><span class="n">adata</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">imarray</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;AnnData contains no annotations. ColocML preprocessing cannot be called.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Median filtering</span>
+    <span class="n">imarray</span> <span class="o">=</span> <span class="n">ndimage</span><span class="o">.</span><span class="n">median_filter</span><span class="p">(</span><span class="n">imarray</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">median_filter_size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">median_filter_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+    <span class="c1"># reshaping</span>
+    <span class="n">imarray</span> <span class="o">=</span> <span class="n">imarray</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">imarray</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1"># Quantile thresholding</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">imarray</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">imarray</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">quantile_threshold</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+    <span class="n">imarray</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># Inserting of processed data into adata object</span>
+    <span class="k">if</span> <span class="n">layer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">adata</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="n">imarray</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">adata</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="n">layer</span><span class="p">]</span> <span class="o">=</span> <span class="n">imarray</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="colocalization">
+<a class="viewcode-back" href="../../metaspace_converter.colocalization.html#metaspace_converter.colocalization.colocalization">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">colocalization</span><span class="p">(</span><span class="n">adata</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">,</span> <span class="n">layer</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;coloc_ml_preprocessing&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Colocalization of ion images using the cosine similarity metric.</span>
+
+<span class="sd">    In combination with the ``colocML_preprocessing`` function, this metric performed best in the</span>
+<span class="sd">    colocML publication (https://doi.org/10.1093/bioinformatics/btaa085).</span>
+
+<span class="sd">    It is recommended to call the ``coloc_ml_preprocessing`` function beforehand.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        adata: An AnnData object.</span>
+<span class="sd">        layer: Key for ``adata.layer`` from which the ionimage_data for preprocessing taken.</span>
+<span class="sd">            If ``None``, ``adata.X`` is used. ``coloc_ml_preprocessing`` will save the preprocessed</span>
+<span class="sd">            data per default in ``adata.layer[&#39;coloc_ml_preprocessing&#39;]``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        None. The processed data is saved in ``adata.varp[&#39;colocalization&#39;]``.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If layer is not found in adata.layers.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Select data</span>
+    <span class="k">if</span> <span class="n">layer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">adata</span><span class="o">.</span><span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">adata</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">adata</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="n">layer</span><span class="p">])</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Layer `</span><span class="si">{</span><span class="n">layer</span><span class="si">}</span><span class="s2">` not found in adata.layers.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Compute colocalization</span>
+    <span class="n">coloc</span> <span class="o">=</span> <span class="n">_pairwise_cosine_similarity</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="c1"># Save colocalization</span>
+    <span class="n">adata</span><span class="o">.</span><span class="n">varp</span><span class="p">[</span><span class="n">COLOCALIZATION</span><span class="p">]</span> <span class="o">=</span> <span class="n">coloc</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_pairwise_cosine_similarity</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+
+    <span class="c1"># Divide image vectors by euclidean norm</span>
+    <span class="n">norm_data</span> <span class="o">=</span> <span class="n">data</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Compute pairwise cosine similarity</span>
+    <span class="n">similarity_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">norm_data</span><span class="p">,</span> <span class="n">norm_data</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">similarity_matrix</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023; Tim Daniel Rose, Andreas Eisenbarth, Theodore Alexandrov.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

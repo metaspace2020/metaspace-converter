@@ -1,0 +1,218 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>metaspace_converter.to_anndata module &mdash; METASPACE Converter  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/sphinx-codeautolink.css?v=b2176991" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            METASPACE Converter
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">METASPACE Converter</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">metaspace_converter.to_anndata module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/metaspace_converter.to_anndata.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-metaspace_converter.to_anndata">
+<span id="metaspace-converter-to-anndata-module"></span><h1>metaspace_converter.to_anndata module<a class="headerlink" href="#module-metaspace_converter.to_anndata" title="Link to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="metaspace_converter.to_anndata.all_image_pixel_coordinates">
+<span class="sig-prename descclassname"><span class="pre">metaspace_converter.to_anndata.</span></span><span class="sig-name descname"><span class="pre">all_image_pixel_coordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/metaspace_converter/to_anndata.html#all_image_pixel_coordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metaspace_converter.to_anndata.all_image_pixel_coordinates" title="Link to this definition"></a></dt>
+<dd><p>Returns a list of Y, X coordinates (Numpy order) for every pixel of an image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>shape</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – The shape of a 2D image</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Array of shape (number of pixels, 2)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="metaspace_converter.to_anndata.create_annotation_id">
+<span class="sig-prename descclassname"><span class="pre">metaspace_converter.to_anndata.</span></span><span class="sig-name descname"><span class="pre">create_annotation_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">formula</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adduct</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chem_mod</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neutral_loss</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/metaspace_converter/to_anndata.html#create_annotation_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metaspace_converter.to_anndata.create_annotation_id" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="metaspace_converter.to_anndata.get_dataset">
+<span class="sig-prename descclassname"><span class="pre">metaspace_converter.to_anndata.</span></span><span class="sig-name descname"><span class="pre">get_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/metaspace_converter/to_anndata.html#get_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metaspace_converter.to_anndata.get_dataset" title="Link to this definition"></a></dt>
+<dd><p>Fetch a dataset instance, if not provided</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://metaspace2020.readthedocs.io/en/latest/content/apireference/sm_annotation_utils.html#metaspace.sm_annotation_utils.SMDataset" title="(in metaspace2020)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SMDataset</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="metaspace_converter.to_anndata.get_ion_image_shape">
+<span class="sig-prename descclassname"><span class="pre">metaspace_converter.to_anndata.</span></span><span class="sig-name descname"><span class="pre">get_ion_image_shape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/metaspace_converter/to_anndata.html#get_ion_image_shape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metaspace_converter.to_anndata.get_ion_image_shape" title="Link to this definition"></a></dt>
+<dd><p>Get the shape of a METASPACE dataset (in Numpy order).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://metaspace2020.readthedocs.io/en/latest/content/apireference/sm_annotation_utils.html#metaspace.sm_annotation_utils.SMDataset" title="(in metaspace2020)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SMDataset</span></code></a>]</span>) – A METASPACE dataset instance. If not provided, a dataset ID must be provided.</p></li>
+<li><p><strong>dataset_id</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – An optional METASPACE dataset ID, if no dataset instance is provided.</p></li>
+<li><p><strong>sm</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://metaspace2020.readthedocs.io/en/latest/content/apireference/sm_annotation_utils.html#metaspace.sm_annotation_utils.SMInstance" title="(in metaspace2020)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SMInstance</span></code></a>]</span>) – An optional SMInstance, otherwise one will be created.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="metaspace_converter.to_anndata.metaspace_to_anndata">
+<span class="sig-prename descclassname"><span class="pre">metaspace_converter.to_anndata.</span></span><span class="sig-name descname"><span class="pre">metaspace_to_anndata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">database</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fdr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_tic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_as_obs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_optical_image</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">annotation_filter</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/metaspace_converter/to_anndata.html#metaspace_to_anndata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metaspace_converter.to_anndata.metaspace_to_anndata" title="Link to this definition"></a></dt>
+<dd><p>Downloads a METASPACE dataset to an <code class="xref py py-class docutils literal notranslate"><span class="pre">AnnData</span></code> object.</p>
+<p>See: <a class="reference external" href="https://metaspace2020.eu/about">https://metaspace2020.eu/about</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://metaspace2020.readthedocs.io/en/latest/content/apireference/sm_annotation_utils.html#metaspace.sm_annotation_utils.SMDataset" title="(in metaspace2020)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SMDataset</span></code></a>]</span>) – A METASPACE dataset instance. If not provided, the <cite>dataset_id</cite> must be given.</p></li>
+<li><p><strong>dataset_id</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – The unique ID of a dataset on METASPACE, e.g. “2021-09-03_11h43m13s”</p></li>
+<li><p><strong>database</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – A single METASPACE database given as a tuple of name and version. Usually it is
+displayed on METASPACE as “HMDB – v4” which corresponds to <cite>(“HMDB”, “v4”)</cite>.</p></li>
+<li><p><strong>fdr</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</span>) – Returns only annotations for which the false discovery rate is less or equal to this
+limit.</p></li>
+<li><p><strong>use_tic</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – When True, the output values will be scaled by the total ion count per pixel and
+will be in 0.0 to 1.0 range.</p></li>
+<li><p><strong>metadata_as_obs</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – Whether to store metadata in the <cite>obs</cite> dataframe instead of <cite>uns</cite>. For a
+single METASPACE dataset, metadata is the same for all pixels, so it would be duplicated
+for all <cite>obs</cite>. When combining multiple datasets, it would be preserved in <cite>obs</cite> but
+not in <cite>uns</cite>.</p></li>
+<li><p><strong>add_optical_image</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – Whether to embed the optical image for SquidPy</p></li>
+<li><p><strong>sm</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://metaspace2020.readthedocs.io/en/latest/content/apireference/sm_annotation_utils.html#metaspace.sm_annotation_utils.SMInstance" title="(in metaspace2020)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SMInstance</span></code></a>]</span>) – Optionally a cached SMInstance</p></li>
+<li><p><strong>annotation_filter</strong> – Additional keyword arguments passed to the METASPACE API.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://anndata.readthedocs.io/en/stable/generated/anndata.AnnData.html#anndata.AnnData" title="(in anndata v0.12.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnnData</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>An <code class="xref py py-class docutils literal notranslate"><span class="pre">AnnData</span></code> object with</dt><dd><ul class="simple">
+<li><p>ion intensities: <code class="docutils literal notranslate"><span class="pre">.X</span></code></p></li>
+<li><p>ion image pixel coordinates: <code class="docutils literal notranslate"><span class="pre">.obs[[&quot;ion_image_pixel_x&quot;,</span> <span class="pre">&quot;ion_image_pixel_y&quot;]]</span></code></p></li>
+<li><p>spatial coordinates: <code class="docutils literal notranslate"><span class="pre">.obsm[&quot;spatial&quot;]</span></code></p></li>
+<li><p>ion properties: <code class="docutils literal notranslate"><span class="pre">.var</span></code>, for example “formula”, “adduct”, “mz”, “fdr”,
+“moleculeNames”, “moleculeIds”, “intensity”…</p></li>
+<li><p>METASPACE metadata: <code class="docutils literal notranslate"><span class="pre">.uns[&quot;metaspace&quot;]</span></code> if not <code class="docutils literal notranslate"><span class="pre">metadata_as_obs</span></code></p></li>
+<li><p>SquidPy metadata: <code class="docutils literal notranslate"><span class="pre">.uns[&quot;spatial&quot;]</span></code> if <code class="docutils literal notranslate"><span class="pre">add_optical_image</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If something is wrong with the input data or parameters</p></li>
+<li><p><a class="reference external" href="https://metaspace2020.readthedocs.io/en/latest/content/apireference/sm_annotation_utils.html#metaspace.sm_annotation_utils.DatasetNotFound" title="(in metaspace2020)"><strong>metaspace.sm_annotation_utils.DatasetNotFound</strong></a> – If the dataset ID is not found</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ConnectionError" title="(in Python v3.14)"><strong>ConnectionError</strong></a> – For any other network connectivity problems</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023; Tim Daniel Rose, Andreas Eisenbarth, Theodore Alexandrov.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

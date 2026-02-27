@@ -1,0 +1,171 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>metaspace_converter.colocalization module &mdash; METASPACE Converter  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/sphinx-codeautolink.css?v=b2176991" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            METASPACE Converter
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">METASPACE Converter</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">metaspace_converter.colocalization module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/metaspace_converter.colocalization.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-metaspace_converter.colocalization">
+<span id="metaspace-converter-colocalization-module"></span><h1>metaspace_converter.colocalization module<a class="headerlink" href="#module-metaspace_converter.colocalization" title="Link to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="metaspace_converter.colocalization.coloc_ml_preprocessing">
+<span class="sig-prename descclassname"><span class="pre">metaspace_converter.colocalization.</span></span><span class="sig-name descname"><span class="pre">coloc_ml_preprocessing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'coloc_ml_preprocessing'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">median_filter_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(3,</span> <span class="pre">3)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quantile_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/metaspace_converter/colocalization.html#coloc_ml_preprocessing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metaspace_converter.colocalization.coloc_ml_preprocessing" title="Link to this definition"></a></dt>
+<dd><p>Preprocessing for colocalization analysis according to the colocML publication
+(<a class="reference external" href="https://doi.org/10.1093/bioinformatics/btaa085">https://doi.org/10.1093/bioinformatics/btaa085</a>).</p>
+<p>In the publication, the authors evaluated colocalization metrics and preprocessing approaches.
+They found the best performance for</p>
+<ol class="arabic simple">
+<li><p>median filtering of ion images with a (3, 3) kernel size and</p></li>
+<li><p>quantile thresholding at 50%, meaning all pixels with intensities below the 50%
+quantile set to 0.</p></li>
+</ol>
+<p>This function performs the same preprocessing steps.
+Recommended for call before running the <code class="docutils literal notranslate"><span class="pre">colocalization</span></code> function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>adata</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://anndata.readthedocs.io/en/stable/generated/anndata.AnnData.html#anndata.AnnData" title="(in anndata v0.12.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnnData</span></code></a></span>) – An AnnData object.</p></li>
+<li><p><strong>layer</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Key for the adata.layers dict in which the processed data will be saved.
+Default value is <code class="docutils literal notranslate"><span class="pre">colocml_preprocessing</span></code>.
+If None, <code class="docutils literal notranslate"><span class="pre">adata.X</span></code> will be overwritten with the processed data.</p></li>
+<li><p><strong>median_filter_size</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – 2-dimensional filter size for the median filtering that
+will be performed per ion image.</p></li>
+<li><p><strong>quantile_threshold</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Float between 0 and 1. The function computes the quantile value per
+ion image and all pixels below the quantile threshold will be set to 0.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None. The processed data is saved in <code class="docutils literal notranslate"><span class="pre">layer</span></code>. If layer is set to None, <code class="docutils literal notranslate"><span class="pre">adata.X</span></code> will
+be overwritten</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If no annotations are available in <code class="docutils literal notranslate"><span class="pre">adata.X</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="metaspace_converter.colocalization.colocalization">
+<span class="sig-prename descclassname"><span class="pre">metaspace_converter.colocalization.</span></span><span class="sig-name descname"><span class="pre">colocalization</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'coloc_ml_preprocessing'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/metaspace_converter/colocalization.html#colocalization"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metaspace_converter.colocalization.colocalization" title="Link to this definition"></a></dt>
+<dd><p>Colocalization of ion images using the cosine similarity metric.</p>
+<p>In combination with the <code class="docutils literal notranslate"><span class="pre">colocML_preprocessing</span></code> function, this metric performed best in the
+colocML publication (<a class="reference external" href="https://doi.org/10.1093/bioinformatics/btaa085">https://doi.org/10.1093/bioinformatics/btaa085</a>).</p>
+<p>It is recommended to call the <code class="docutils literal notranslate"><span class="pre">coloc_ml_preprocessing</span></code> function beforehand.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>adata</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://anndata.readthedocs.io/en/stable/generated/anndata.AnnData.html#anndata.AnnData" title="(in anndata v0.12.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnnData</span></code></a></span>) – An AnnData object.</p></li>
+<li><p><strong>layer</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Key for <code class="docutils literal notranslate"><span class="pre">adata.layer</span></code> from which the ionimage_data for preprocessing taken.
+If <code class="docutils literal notranslate"><span class="pre">None</span></code>, <code class="docutils literal notranslate"><span class="pre">adata.X</span></code> is used. <code class="docutils literal notranslate"><span class="pre">coloc_ml_preprocessing</span></code> will save the preprocessed
+data per default in <code class="docutils literal notranslate"><span class="pre">adata.layer['coloc_ml_preprocessing']</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None. The processed data is saved in <code class="docutils literal notranslate"><span class="pre">adata.varp['colocalization']</span></code>.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If layer is not found in adata.layers.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023; Tim Daniel Rose, Andreas Eisenbarth, Theodore Alexandrov.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

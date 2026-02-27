@@ -1,0 +1,7 @@
+metaspace\_converter.to\_spatialdata module
+===========================================
+
+.. automodule:: metaspace_converter.to_spatialdata
+   :members:
+   :undoc-members:
+   :show-inheritance:

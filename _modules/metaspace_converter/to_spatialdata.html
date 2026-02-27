@@ -1,0 +1,337 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>metaspace_converter.to_spatialdata &mdash; METASPACE Converter  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-codeautolink.css?v=b2176991" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            METASPACE Converter
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">METASPACE Converter</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">metaspace_converter.to_spatialdata</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for metaspace_converter.to_spatialdata</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">anndata</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnnData</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">metaspace</span><span class="w"> </span><span class="kn">import</span> <span class="n">SMInstance</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">metaspace.sm_annotation_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">SMDataset</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">spatial_image</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpatialImage</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">spatialdata</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpatialData</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">spatialdata.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image2DModel</span><span class="p">,</span> <span class="n">PointsModel</span><span class="p">,</span> <span class="n">TableModel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">spatialdata.transformations</span><span class="w"> </span><span class="kn">import</span> <span class="n">Affine</span><span class="p">,</span> <span class="n">Scale</span><span class="p">,</span> <span class="n">Sequence</span> <span class="k">as</span> <span class="n">SequenceTransform</span><span class="p">,</span> <span class="n">Translation</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">metaspace_converter.constants</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">COL</span><span class="p">,</span>
+    <span class="n">COORD_SYS_GLOBAL</span><span class="p">,</span>
+    <span class="n">INSTANCE_KEY</span><span class="p">,</span>
+    <span class="n">MICROMETER</span><span class="p">,</span>
+    <span class="n">OPTICAL_IMAGE_KEY</span><span class="p">,</span>
+    <span class="n">POINTS_KEY</span><span class="p">,</span>
+    <span class="n">REGION_KEY</span><span class="p">,</span>
+    <span class="n">TABLE_KEY</span><span class="p">,</span>
+    <span class="n">XY</span><span class="p">,</span>
+    <span class="n">YX</span><span class="p">,</span>
+    <span class="n">YXC</span><span class="p">,</span>
+    <span class="n">X</span><span class="p">,</span>
+    <span class="n">Y</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">metaspace_converter.to_anndata</span><span class="w"> </span><span class="kn">import</span> <span class="n">metaspace_to_anndata</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">metaspace_converter.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">has_optical_image</span>
+
+
+<div class="viewcode-block" id="metaspace_to_spatialdata">
+<a class="viewcode-back" href="../../metaspace_converter.to_spatialdata.html#metaspace_converter.metaspace_to_spatialdata">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">metaspace_to_spatialdata</span><span class="p">(</span>
+    <span class="n">dataset</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SMDataset</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">dataset_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">database</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">fdr</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">use_tic</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">metadata_as_obs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">add_optical_image</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">optical_name_added</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">OPTICAL_IMAGE_KEY</span><span class="p">,</span>
+    <span class="n">add_points</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">points_name_added</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">POINTS_KEY</span><span class="p">,</span>
+    <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">TABLE_KEY</span><span class="p">,</span>
+    <span class="n">sm</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SMInstance</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">annotation_filter</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SpatialData</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Download a METASPACE dataset as a :py:class:`SpatialData` object.</span>
+
+<span class="sd">    See: https://metaspace2020.eu/about</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dataset: A METASPACE dataset instance. If not provided, the ``dataset_id`` must be given.</span>
+<span class="sd">        dataset_id: The unique ID of a dataset on METASPACE, e.g. &quot;2021-09-03_11h43m13s&quot;</span>
+<span class="sd">        database: A single METASPACE database given as a tuple of name and version. Usually it is</span>
+<span class="sd">            displayed on METASPACE as &quot;HMDB – v4&quot; which corresponds to ``(&quot;HMDB&quot;, &quot;v4&quot;)``.</span>
+<span class="sd">        fdr: Returns only annotations for which the false discovery rate is less or equal to this</span>
+<span class="sd">            limit.</span>
+<span class="sd">        use_tic: When True, the output values will be scaled by the total ion count per pixel and</span>
+<span class="sd">            will be in 0.0 to 1.0 range.</span>
+<span class="sd">        metadata_as_obs: Whether to store metadata in the ``obs`` dataframe instead of ``uns``. For</span>
+<span class="sd">            a single METASPACE dataset, metadata is the same for all pixels, so it would be</span>
+<span class="sd">            duplicated for all ``obs``. When combining multiple datasets, it would be preserved in</span>
+<span class="sd">            ``obs`` but not in ``uns``.</span>
+<span class="sd">        add_optical_image: Whether to also add the optical image (if one exists) to SpatialData</span>
+<span class="sd">            images. If none exists, it is not added, and no error raised.</span>
+<span class="sd">        optical_name_added: Name of the element where to store the image in the SpatialData object</span>
+<span class="sd">        add_points: Whether to also add ion image pixel coordinates as SpatialData points. This</span>
+<span class="sd">            allows to spatially visualize the ion image values. If False, only ion intensities are</span>
+<span class="sd">            added to the table and coordinates are added to ``obs``.</span>
+<span class="sd">        points_name: Name of the element where to store the points in the SpatialData object</span>
+<span class="sd">        table_name_added: The name for the SpatialData table to which annotations will be saved.</span>
+<span class="sd">        sm: Optionally a cached SMInstance</span>
+<span class="sd">        annotation_filter: Additional keyword arguments passed to the METASPACE API.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A :py:class:`SpatialData` object with</span>
+<span class="sd">            * ion intensities and metadata: ``.table``</span>
+<span class="sd">            * optical image: ``.images[&quot;optical_image&quot;]`` (or ``optical_name_added``)</span>
+<span class="sd">            * sampling coordinates: ``.points[&quot;maldi_points&quot;]`` (or ``points_name_added``) in a</span>
+<span class="sd">              coordinate system relative to the top-left image corner and physical scale</span>
+<span class="sd">              (micrometers)</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If something is wrong with the input data or parameters</span>
+<span class="sd">        metaspace.sm_annotation_utils.DatasetNotFound: If the dataset ID is not found</span>
+<span class="sd">        ConnectionError: For any other network connectivity problems</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">dataset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">sm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">sm</span> <span class="o">=</span> <span class="n">SMInstance</span><span class="p">()</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">dataset</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">dataset_id</span><span class="p">)</span>
+
+    <span class="c1"># Create table</span>
+    <span class="n">adata</span> <span class="o">=</span> <span class="n">metaspace_to_anndata</span><span class="p">(</span>
+        <span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
+        <span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">,</span>
+        <span class="n">fdr</span><span class="o">=</span><span class="n">fdr</span><span class="p">,</span>
+        <span class="n">use_tic</span><span class="o">=</span><span class="n">use_tic</span><span class="p">,</span>
+        <span class="n">metadata_as_obs</span><span class="o">=</span><span class="n">metadata_as_obs</span><span class="p">,</span>
+        <span class="n">add_optical_image</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">sm</span><span class="o">=</span><span class="n">sm</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">annotation_filter</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">table</span> <span class="o">=</span> <span class="n">_create_spatialdata_table</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+    <span class="n">sdata</span> <span class="o">=</span> <span class="n">SpatialData</span><span class="p">(</span><span class="n">tables</span><span class="o">=</span><span class="p">{</span><span class="n">table_name</span><span class="p">:</span> <span class="n">table</span><span class="p">})</span>
+
+    <span class="c1"># Create image</span>
+    <span class="k">if</span> <span class="n">has_optical_image</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span> <span class="ow">and</span> <span class="n">add_optical_image</span><span class="p">:</span>
+        <span class="n">optical_image</span> <span class="o">=</span> <span class="n">optical_image_to_spatial_image</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">)</span>
+        <span class="n">sdata</span><span class="o">.</span><span class="n">images</span><span class="p">[</span><span class="n">optical_name_added</span><span class="p">]</span> <span class="o">=</span> <span class="n">optical_image</span>
+
+    <span class="c1"># Create points</span>
+    <span class="k">if</span> <span class="n">add_points</span><span class="p">:</span>
+        <span class="n">points</span> <span class="o">=</span> <span class="n">_create_points</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">adata</span><span class="p">)</span>
+        <span class="n">sdata</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">points_name_added</span><span class="p">]</span> <span class="o">=</span> <span class="n">points</span>
+
+    <span class="k">return</span> <span class="n">sdata</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_matrix_homogeneous</span><span class="p">(</span><span class="n">transform_matrix_2d</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="c1"># In an n×n matrix, the last row (except last element) should be zeros.</span>
+    <span class="n">actual</span> <span class="o">=</span> <span class="n">transform_matrix_2d</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">expected</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">transform_matrix_2d</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="optical_image_to_spatial_image">
+<a class="viewcode-back" href="../../metaspace_converter.to_spatialdata.html#metaspace_converter.optical_image_to_spatial_image">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">optical_image_to_spatial_image</span><span class="p">(</span><span class="n">dataset</span><span class="p">:</span> <span class="n">SMDataset</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SpatialImage</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Download the optical image of a METASPACE dataset to a SpatialImage object.</span>
+
+<span class="sd">    This function requires that the dataset has an optical image. Otherwise, an error is raised.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dataset: A METASPACE dataset</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A SpatialImage object with the image&#39;s transformation to world coordinates</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">optical_images</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">optical_images</span><span class="p">()</span>
+    <span class="n">image_yx_rgb</span> <span class="o">=</span> <span class="n">optical_images</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># Transformation from optical image to ion image coordinate system (inverse of ``_transforms``)</span>
+    <span class="n">matrix_xy</span> <span class="o">=</span> <span class="n">optical_images</span><span class="o">.</span><span class="n">_itransforms</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">_is_matrix_homogeneous</span><span class="p">(</span><span class="n">matrix_xy</span><span class="p">):</span>
+        <span class="n">affine_matrix_xy</span> <span class="o">=</span> <span class="n">matrix_xy</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;The METASPACE optical image has a projective transformation, but &quot;</span>
+            <span class="s2">&quot;SpatialData only supports affine transformations. &quot;</span>
+            <span class="s2">&quot;Using an approximated affine.&quot;</span>
+        <span class="p">)</span>
+        <span class="n">affine_matrix_xy</span> <span class="o">=</span> <span class="n">matrix_xy</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">affine_matrix_xy</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">optical_to_ion_image</span> <span class="o">=</span> <span class="n">Affine</span><span class="p">(</span><span class="n">matrix</span><span class="o">=</span><span class="n">affine_matrix_xy</span><span class="p">,</span> <span class="n">input_axes</span><span class="o">=</span><span class="n">XY</span><span class="p">,</span> <span class="n">output_axes</span><span class="o">=</span><span class="n">XY</span><span class="p">)</span>
+    <span class="c1"># Transformation from ion image to world coordinate system</span>
+    <span class="n">ion_image_to_global</span> <span class="o">=</span> <span class="n">get_ion_image_to_physical_transformation</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+    <span class="n">pixel_corner_to_center</span> <span class="o">=</span> <span class="n">Translation</span><span class="p">(</span><span class="n">translation</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">],</span> <span class="n">axes</span><span class="o">=</span><span class="n">YX</span><span class="p">)</span>
+    <span class="n">optical_to_global</span> <span class="o">=</span> <span class="n">SequenceTransform</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">optical_to_ion_image</span><span class="p">,</span> <span class="n">pixel_corner_to_center</span><span class="p">,</span> <span class="n">ion_image_to_global</span><span class="p">]</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">to_affine</span><span class="p">(</span><span class="n">input_axes</span><span class="o">=</span><span class="n">YX</span><span class="p">,</span> <span class="n">output_axes</span><span class="o">=</span><span class="n">YX</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Image2DModel</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span>
+        <span class="n">image_yx_rgb</span><span class="p">,</span>
+        <span class="n">transformations</span><span class="o">=</span><span class="p">{</span><span class="n">COORD_SYS_GLOBAL</span><span class="p">:</span> <span class="n">optical_to_global</span><span class="p">},</span>
+        <span class="n">dims</span><span class="o">=</span><span class="n">YXC</span><span class="p">,</span>
+        <span class="n">scale_factors</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+        <span class="n">axis_units</span><span class="o">=</span><span class="p">{</span><span class="n">Y</span><span class="p">:</span> <span class="n">MICROMETER</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">MICROMETER</span><span class="p">},</span>
+        <span class="n">c_coords</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">),</span>
+        <span class="c1"># rgb=True,</span>
+    <span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_create_spatialdata_table</span><span class="p">(</span><span class="n">adata</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnnData</span><span class="p">:</span>
+    <span class="c1"># Add the index as a separate column for matching rows to regions in labels or points.</span>
+    <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="n">INSTANCE_KEY</span><span class="p">]</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="c1"># Avoid same name for index and a column name, which is ambiguous and causes warning or error.</span>
+    <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;index&quot;</span>
+    <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="n">REGION_KEY</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">POINTS_KEY</span><span class="p">]</span> <span class="o">*</span> <span class="n">adata</span><span class="o">.</span><span class="n">n_obs</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;category&quot;</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">TableModel</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span>
+        <span class="n">adata</span><span class="p">,</span>
+        <span class="n">region</span><span class="o">=</span><span class="p">[</span><span class="n">POINTS_KEY</span><span class="p">],</span>  <span class="c1"># element in SpatialData to be used</span>
+        <span class="n">region_key</span><span class="o">=</span><span class="n">REGION_KEY</span><span class="p">,</span>  <span class="c1"># table column containing the regions</span>
+        <span class="n">instance_key</span><span class="o">=</span><span class="n">INSTANCE_KEY</span><span class="p">,</span>  <span class="c1"># table column to be matched to points index</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_create_points</span><span class="p">(</span><span class="n">dataset</span><span class="p">:</span> <span class="n">SMDataset</span><span class="p">,</span> <span class="n">adata</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="c1"># FIXME: PointsModel does not yet allow to specify units, we should set micrometers as in image.</span>
+    <span class="c1"># FIXME: Workaround for that napari-spatialdata does not allow to visualize values from ``X``</span>
+    <span class="c1">#  array, only from ``obs``. For now, we copy X to ``obs`` to enable visualization.</span>
+    <span class="c1"># points = PointsModel.parse(</span>
+    <span class="c1">#     adata.obs[[X, Y]].reset_index(),</span>
+    <span class="c1">#     transformations={COORD_SYS_GLOBAL: get_ion_image_to_physical_transformation(dataset)},</span>
+    <span class="c1"># )</span>
+    <span class="k">return</span> <span class="n">PointsModel</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span>
+        <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[[</span><span class="n">COL</span><span class="o">.</span><span class="n">ion_image_pixel_x</span><span class="p">,</span> <span class="n">COL</span><span class="o">.</span><span class="n">ion_image_pixel_y</span><span class="p">]]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(),</span>
+                <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">adata</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">adata</span><span class="o">.</span><span class="n">var</span><span class="o">.</span><span class="n">index</span><span class="p">),</span>
+            <span class="p">],</span>
+            <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">coordinates</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="n">COL</span><span class="o">.</span><span class="n">ion_image_pixel_x</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="n">COL</span><span class="o">.</span><span class="n">ion_image_pixel_y</span><span class="p">},</span>
+        <span class="n">transformations</span><span class="o">=</span><span class="p">{</span><span class="n">COORD_SYS_GLOBAL</span><span class="p">:</span> <span class="n">get_ion_image_to_physical_transformation</span><span class="p">(</span><span class="n">dataset</span><span class="p">)},</span>
+    <span class="p">)</span>
+
+
+<div class="viewcode-block" id="get_ion_image_to_physical_transformation">
+<a class="viewcode-back" href="../../metaspace_converter.to_spatialdata.html#metaspace_converter.get_ion_image_to_physical_transformation">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_ion_image_to_physical_transformation</span><span class="p">(</span><span class="n">dataset</span><span class="p">:</span> <span class="n">SMDataset</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scale</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the transformation from the ion image (pixels) to the world coordinate system (micrometers).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dataset: A METASPACE dataset</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A scale SpatialData transformation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ion_image_pixel_size</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;MS_Analysis&quot;</span><span class="p">][</span><span class="s2">&quot;Pixel_Size&quot;</span><span class="p">]</span>
+    <span class="n">scale_factors_xy</span> <span class="o">=</span> <span class="p">[</span><span class="n">ion_image_pixel_size</span><span class="p">[</span><span class="s2">&quot;Xaxis&quot;</span><span class="p">],</span> <span class="n">ion_image_pixel_size</span><span class="p">[</span><span class="s2">&quot;Yaxis&quot;</span><span class="p">]]</span>
+    <span class="k">return</span> <span class="n">Scale</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="n">scale_factors_xy</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="n">XY</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023; Tim Daniel Rose, Andreas Eisenbarth, Theodore Alexandrov.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

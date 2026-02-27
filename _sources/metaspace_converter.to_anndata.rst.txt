@@ -1,0 +1,7 @@
+metaspace\_converter.to\_anndata module
+=======================================
+
+.. automodule:: metaspace_converter.to_anndata
+   :members:
+   :undoc-members:
+   :show-inheritance:

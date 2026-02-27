@@ -1,0 +1,229 @@
+
+<!DOCTYPE html>
+
+<html class="writer-html5" data-content_root="./" lang="en">
+<head>
+<meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Examples — METASPACE Converter  documentation</title>
+<link href="_static/pygments.css?v=b86133f3" rel="stylesheet" type="text/css"/>
+<link href="_static/css/theme.css?v=9edc463e" rel="stylesheet" type="text/css"/>
+<link href="_static/sphinx-codeautolink.css?v=b2176991" rel="stylesheet" type="text/css"/>
+<link href="_static/copybutton.css?v=76b2166b" rel="stylesheet" type="text/css"/>
+<script src="_static/jquery.js?v=5d32c60e"></script>
+<script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+<script src="_static/documentation_options.js?v=5929fcd5"></script>
+<script src="_static/doctools.js?v=9a2dae69"></script>
+<script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+<script src="_static/clipboard.min.js?v=a7894cd8"></script>
+<script src="_static/copybutton.js?v=f281be69"></script>
+<script src="_static/js/theme.js"></script>
+<link href="genindex.html" rel="index" title="Index"/>
+<link href="search.html" rel="search" title="Search"/>
+<link href="api.html" rel="prev" title="API"/>
+</head>
+<body class="wy-body-for-nav">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="index.html">
+            METASPACE Converter
+          </a>
+<div role="search">
+<form action="search.html" class="wy-form" id="rtd-search-form" method="get">
+<input aria-label="Search docs" name="q" placeholder="Search docs" type="text"/>
+<input name="check_keywords" type="hidden" value="yes"/>
+<input name="area" type="hidden" value="default"/>
+</form>
+</div>
+</div><div aria-label="Navigation menu" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#plain-anndata-with-scanpy">Plain AnnData with ScanPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#squidpy">SquidPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#convert-anndata-objects-to-ion-image-arrays">Convert AnnData objects to ion image arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#spatialdata">SpatialData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#colocalization-analysis">Colocalization Analysis</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift"><nav aria-label="Mobile navigation menu" class="wy-nav-top">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="index.html">METASPACE Converter</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="Page navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a aria-label="Home" class="icon icon-home" href="index.html"></a></li>
+<li class="breadcrumb-item active">Examples</li>
+<li class="wy-breadcrumbs-aside">
+<a href="_sources/examples.rst.txt" rel="nofollow"> View page source</a>
+</li>
+</ul>
+<hr/>
+</div>
+<div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+<div itemprop="articleBody">
+<section id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h1>
+<section id="plain-anndata-with-scanpy">
+<h2>Plain AnnData with ScanPy<a class="headerlink" href="#plain-anndata-with-scanpy" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><a class="sphinx-codeautolink-a" href="metaspace_converter.html#module-metaspace_converter" title="metaspace_converter"><span class="nn">metaspace_converter</span></a><span class="w"> </span><span class="kn">import</span> <a class="sphinx-codeautolink-a" href="metaspace_converter.html#metaspace_converter.metaspace_to_anndata" title="metaspace_converter.metaspace_to_anndata"><span class="n">metaspace_to_anndata</span></a>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scanpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sc</span>
+
+<span class="c1"># Download data and convert to an AnnData object</span>
+<a class="sphinx-codeautolink-a" href="https://anndata.readthedocs.io/en/stable/generated/anndata.AnnData.html#anndata.AnnData" title="anndata._core.anndata.AnnData"><span class="n">adata</span></a> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="metaspace_converter.html#metaspace_converter.metaspace_to_anndata" title="metaspace_converter.metaspace_to_anndata"><span class="n">metaspace_to_anndata</span></a><span class="p">(</span>
+    <span class="n">dataset_id</span><span class="o">=</span><span class="s2">"2022-08-05_17h28m56s"</span><span class="p">,</span>
+    <span class="n">fdr</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">database</span><span class="o">=</span><span class="p">(</span><span class="s2">"BraChemDB"</span><span class="p">,</span> <span class="s2">"2018-01"</span><span class="p">),</span>
+<span class="p">)</span>
+
+<span class="c1"># Visualization with ScanPy</span>
+<a class="sphinx-codeautolink-a" href="https://scanpy.readthedocs.io/en/stable/api/generated/scanpy.pl.spatial.html#scanpy.pl.spatial" title="scanpy.pl.spatial"><span class="n">sc</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">spatial</span></a><span class="p">(</span>
+    <a class="sphinx-codeautolink-a" href="https://anndata.readthedocs.io/en/stable/generated/anndata.AnnData.html#anndata.AnnData" title="anndata._core.anndata.AnnData"><span class="n">adata</span></a><span class="p">,</span>
+    <span class="c1"># Choose first ion for visualization</span>
+    <span class="n">color</span><span class="o">=</span><span class="n">adata</span><span class="o">.</span><span class="n">var</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+    <span class="n">img_key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">spot_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<img alt="Visualization with ScanPy" src="_images/example_img_sc.png"/>
+</section>
+<section id="squidpy">
+<h2>SquidPy<a class="headerlink" href="#squidpy" title="Link to this heading"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Example may not work
+SquidPy (0.4.1) is not anymore compatible with the dependencies used in this project.</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><a class="sphinx-codeautolink-a" href="metaspace_converter.html#module-metaspace_converter" title="metaspace_converter"><span class="nn">metaspace_converter</span></a><span class="w"> </span><span class="kn">import</span> <a class="sphinx-codeautolink-a" href="metaspace_converter.html#metaspace_converter.metaspace_to_anndata" title="metaspace_converter.metaspace_to_anndata"><span class="n">metaspace_to_anndata</span></a>
+<span class="kn">import</span><span class="w"> </span><a class="sphinx-codeautolink-a" href="https://squidpy.readthedocs.io/en/stable/api.html#module-squidpy" title="squidpy"><span class="nn">squidpy</span></a><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sq</span>
+
+<span class="c1"># Download dataset with optical background image</span>
+<a class="sphinx-codeautolink-a" href="https://anndata.readthedocs.io/en/stable/generated/anndata.AnnData.html#anndata.AnnData" title="anndata._core.anndata.AnnData"><span class="n">adata</span></a> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="metaspace_converter.html#metaspace_converter.metaspace_to_anndata" title="metaspace_converter.metaspace_to_anndata"><span class="n">metaspace_to_anndata</span></a><span class="p">(</span>
+    <span class="n">dataset_id</span><span class="o">=</span><span class="s2">"2022-08-05_17h28m56s"</span><span class="p">,</span>
+    <span class="n">fdr</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">database</span><span class="o">=</span><span class="p">(</span><span class="s2">"BraChemDB"</span><span class="p">,</span> <span class="s2">"2018-01"</span><span class="p">),</span>
+    <span class="n">add_optical_image</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+
+<a class="sphinx-codeautolink-a" href="https://squidpy.readthedocs.io/en/stable/api/squidpy.pl.spatial_scatter.html#squidpy.pl.spatial_scatter" title="squidpy.pl.spatial_scatter"><span class="n">sq</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">spatial_scatter</span></a><span class="p">(</span>
+    <a class="sphinx-codeautolink-a" href="https://anndata.readthedocs.io/en/stable/generated/anndata.AnnData.html#anndata.AnnData" title="anndata._core.anndata.AnnData"><span class="n">adata</span></a><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">adata</span><span class="o">.</span><span class="n">var</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">shape</span><span class="o">=</span><span class="s2">"square"</span><span class="p">,</span> <span class="n">img</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<img alt="Visualization with SquidPy" src="_images/example_img_sq.png"/>
+</section>
+<section id="convert-anndata-objects-to-ion-image-arrays">
+<h2>Convert AnnData objects to ion image arrays<a class="headerlink" href="#convert-anndata-objects-to-ion-image-arrays" title="Link to this heading"></a></h2>
+<p>If you want to work with the ion images as numpy arrays, the function <cite>anndata_to_image_array</cite> can
+convert previously downloaded AnnData objects to numpy arrays.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><a class="sphinx-codeautolink-a" href="metaspace_converter.html#module-metaspace_converter" title="metaspace_converter"><span class="nn">metaspace_converter</span></a><span class="w"> </span><span class="kn">import</span> <a class="sphinx-codeautolink-a" href="metaspace_converter.html#metaspace_converter.metaspace_to_anndata" title="metaspace_converter.metaspace_to_anndata"><span class="n">metaspace_to_anndata</span></a><span class="p">,</span> <a class="sphinx-codeautolink-a" href="metaspace_converter.html#metaspace_converter.anndata_to_image_array" title="metaspace_converter.anndata_to_image_array"><span class="n">anndata_to_image_array</span></a>
+
+<span class="c1"># Download data</span>
+<a class="sphinx-codeautolink-a" href="https://anndata.readthedocs.io/en/stable/generated/anndata.AnnData.html#anndata.AnnData" title="anndata._core.anndata.AnnData"><span class="n">adata2</span></a> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="metaspace_converter.html#metaspace_converter.metaspace_to_anndata" title="metaspace_converter.metaspace_to_anndata"><span class="n">metaspace_to_anndata</span></a><span class="p">(</span><span class="n">dataset_id</span><span class="o">=</span><span class="s2">"2023-11-14_21h58m39s"</span><span class="p">,</span> <span class="n">fdr</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+
+<a class="sphinx-codeautolink-a" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">ion_images</span></a> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="metaspace_converter.html#metaspace_converter.anndata_to_image_array" title="metaspace_converter.anndata_to_image_array"><span class="n">anndata_to_image_array</span></a><span class="p">(</span><a class="sphinx-codeautolink-a" href="https://anndata.readthedocs.io/en/stable/generated/anndata.AnnData.html#anndata.AnnData" title="anndata._core.anndata.AnnData"><span class="n">adata2</span></a><span class="p">)</span>
+
+<span class="c1"># 20 ion images of shape 130x143</span>
+<a class="sphinx-codeautolink-a" href="https://docs.python.org/3/library/functions.html#print" title="print"><span class="nb">print</span></a><span class="p">(</span><a class="sphinx-codeautolink-a" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.shape.html#numpy.ndarray.shape" title="numpy.ndarray.shape"><span class="n">ion_images</span><span class="o">.</span><span class="n">shape</span></a><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(20, 130, 143)
+</pre></div>
+</div>
+</section>
+<section id="spatialdata">
+<h2>SpatialData<a class="headerlink" href="#spatialdata" title="Link to this heading"></a></h2>
+<p>Here using a reversed colormap which better represents intense values on bright background.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><a class="sphinx-codeautolink-a" href="metaspace_converter.html#module-metaspace_converter" title="metaspace_converter"><span class="nn">metaspace_converter</span></a><span class="w"> </span><span class="kn">import</span> <a class="sphinx-codeautolink-a" href="metaspace_converter.html#metaspace_converter.metaspace_to_spatialdata" title="metaspace_converter.metaspace_to_spatialdata"><span class="n">metaspace_to_spatialdata</span></a>
+<span class="kn">import</span><span class="w"> </span><span class="nn">spatialdata_plot</span>  <span class="c1"># noqa: Not directly used but extends spatialdata</span>
+
+<span class="c1"># Download dataset with optical background image</span>
+<a class="sphinx-codeautolink-a" href="https://spatialdata.scverse.org/en/latest/api/SpatialData.html#spatialdata.SpatialData" title="spatialdata._core.spatialdata.SpatialData"><span class="n">sdata</span></a> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="metaspace_converter.html#metaspace_converter.metaspace_to_spatialdata" title="metaspace_converter.metaspace_to_spatialdata"><span class="n">metaspace_to_spatialdata</span></a><span class="p">(</span>
+    <span class="n">dataset_id</span><span class="o">=</span><span class="s2">"2022-08-05_17h28m56s"</span><span class="p">,</span>
+    <span class="n">fdr</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">database</span><span class="o">=</span><span class="p">(</span><span class="s2">"BraChemDB"</span><span class="p">,</span> <span class="s2">"2018-01"</span><span class="p">),</span>
+<span class="p">)</span>
+
+<span class="c1"># Workaround: spatialdata-plot currently does not use points transformation</span>
+<span class="n">sdata</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="s2">"maldi_points"</span><span class="p">]</span> <span class="o">=</span> <span class="n">sdata</span><span class="o">.</span><span class="n">transform_element_to_coordinate_system</span><span class="p">(</span>
+    <span class="s2">"maldi_points"</span><span class="p">,</span> <span class="s2">"global"</span>
+<span class="p">)</span>
+
+<span class="p">(</span>
+    <a class="sphinx-codeautolink-a" href="https://spatialdata.scverse.org/projects/plot/en/latest/plotting.html#spatialdata_plot.pl.basic.PlotAccessor.render_images" title="spatialdata_plot.pl.basic.PlotAccessor.render_images"><span class="n">sdata</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">render_images</span></a><span class="p">(</span><span class="s2">"optical_image"</span><span class="p">)</span>
+    <span class="o">.</span><a class="sphinx-codeautolink-a" href="https://spatialdata.scverse.org/projects/plot/en/latest/plotting.html#spatialdata_plot.pl.basic.PlotAccessor.render_points" title="spatialdata_plot.pl.basic.PlotAccessor.render_points"><span class="n">pl</span><span class="o">.</span><span class="n">render_points</span></a><span class="p">(</span>
+        <span class="s2">"maldi_points"</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="n">sdata</span><span class="o">.</span><span class="n">tables</span><span class="p">[</span><span class="s2">"table"</span><span class="p">]</span><span class="o">.</span><span class="n">var</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">cmap</span><span class="o">=</span><span class="s2">"viridis_r"</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="o">.</span><a class="sphinx-codeautolink-a" href="https://spatialdata.scverse.org/projects/plot/en/latest/plotting.html#spatialdata_plot.pl.basic.PlotAccessor.show" title="spatialdata_plot.pl.basic.PlotAccessor.show"><span class="n">pl</span><span class="o">.</span><span class="n">show</span></a><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">sdata</span><span class="o">.</span><span class="n">tables</span><span class="p">[</span><span class="s2">"table"</span><span class="p">]</span><span class="o">.</span><span class="n">var</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">coordinate_systems</span><span class="o">=</span><span class="s2">"global"</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<img alt="Visualization with SpatialData" src="_images/example_img_sd.png"/>
+</section>
+<section id="colocalization-analysis">
+<h2>Colocalization Analysis<a class="headerlink" href="#colocalization-analysis" title="Link to this heading"></a></h2>
+<p>A popular type of analysis for imaging Mass Spectrometry data or spatial metabolomics
+is colocalization analysis.
+In the <a class="reference external" href="https://doi.org/10.1093/bioinformatics/btaa085">ColocML</a> publication,
+the authors evaluated data processing and colocalization metrics.
+Their best method (median filtering, quantile thresholding, and cosine similarity),
+can be executed with our package:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><a class="sphinx-codeautolink-a" href="metaspace_converter.html#module-metaspace_converter" title="metaspace_converter"><span class="nn">metaspace_converter</span></a><span class="w"> </span><span class="kn">import</span> <a class="sphinx-codeautolink-a" href="metaspace_converter.html#metaspace_converter.metaspace_to_anndata" title="metaspace_converter.metaspace_to_anndata"><span class="n">metaspace_to_anndata</span></a><span class="p">,</span> <a class="sphinx-codeautolink-a" href="metaspace_converter.colocalization.html#module-metaspace_converter.colocalization" title="metaspace_converter.colocalization"><span class="n">colocalization</span></a>
+
+<span class="c1"># Download data</span>
+<a class="sphinx-codeautolink-a" href="https://anndata.readthedocs.io/en/stable/generated/anndata.AnnData.html#anndata.AnnData" title="anndata._core.anndata.AnnData"><span class="n">adata</span></a> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="metaspace_converter.html#metaspace_converter.metaspace_to_anndata" title="metaspace_converter.metaspace_to_anndata"><span class="n">metaspace_to_anndata</span></a><span class="p">(</span><span class="n">dataset_id</span><span class="o">=</span><span class="s2">"2023-11-14_21h58m39s"</span><span class="p">,</span> <span class="n">fdr</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+
+<span class="c1"># Perform median filtering and quantile thresholding</span>
+<span class="c1"># The processed data is saved as a layer `adata.layers["coloc_ml_preprocessing"]`</span>
+<span class="c1"># It has the same dimensions as `adata.X`</span>
+<a class="sphinx-codeautolink-a" href="metaspace_converter.colocalization.html#metaspace_converter.colocalization.coloc_ml_preprocessing" title="metaspace_converter.colocalization.coloc_ml_preprocessing"><span class="n">colocalization</span><span class="o">.</span><span class="n">coloc_ml_preprocessing</span></a><span class="p">(</span><a class="sphinx-codeautolink-a" href="https://anndata.readthedocs.io/en/stable/generated/anndata.AnnData.html#anndata.AnnData" title="anndata._core.anndata.AnnData"><span class="n">adata</span></a><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="s2">"colocml_preprocessing"</span><span class="p">)</span>
+
+<span class="c1"># Compute the pairwise colocalization matrix between all ion images</span>
+<span class="c1"># As an input, the processed data from `adata.layers["coloc_ml_preprocessing"]` is used</span>
+<span class="c1"># The colocalization matrix is saved in `adata.varp["colocalization"]`</span>
+<a class="sphinx-codeautolink-a" href="metaspace_converter.colocalization.html#metaspace_converter.colocalization.colocalization" title="metaspace_converter.colocalization.colocalization"><span class="n">colocalization</span><span class="o">.</span><span class="n">colocalization</span></a><span class="p">(</span><a class="sphinx-codeautolink-a" href="https://anndata.readthedocs.io/en/stable/generated/anndata.AnnData.html#anndata.AnnData" title="anndata._core.anndata.AnnData"><span class="n">adata</span></a><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="s2">"colocml_preprocessing"</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</div>
+</div>
+<footer><div aria-label="Footer" class="rst-footer-buttons" role="navigation">
+<a accesskey="p" class="btn btn-neutral float-left" href="api.html" rel="prev" title="API"><span aria-hidden="true" class="fa fa-arrow-circle-left"></span> Previous</a>
+</div>
+<hr/>
+<div role="contentinfo">
+<p>© Copyright 2023; Tim Daniel Rose, Andreas Eisenbarth, Theodore Alexandrov.</p>
+</div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+</div>
+</div>
+</section>
+</div>
+<script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+</body>
+</html>

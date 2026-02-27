@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+
+<html class="writer-html5" data-content_root="./" lang="en">
+<head>
+<meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Welcome to METASPACE Converter’s documentation! — METASPACE Converter  documentation</title>
+<link href="_static/pygments.css?v=b86133f3" rel="stylesheet" type="text/css"/>
+<link href="_static/css/theme.css?v=9edc463e" rel="stylesheet" type="text/css"/>
+<link href="_static/sphinx-codeautolink.css?v=b2176991" rel="stylesheet" type="text/css"/>
+<link href="_static/copybutton.css?v=76b2166b" rel="stylesheet" type="text/css"/>
+<script src="_static/jquery.js?v=5d32c60e"></script>
+<script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+<script src="_static/documentation_options.js?v=5929fcd5"></script>
+<script src="_static/doctools.js?v=9a2dae69"></script>
+<script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+<script src="_static/clipboard.min.js?v=a7894cd8"></script>
+<script src="_static/copybutton.js?v=f281be69"></script>
+<script src="_static/js/theme.js"></script>
+<link href="genindex.html" rel="index" title="Index"/>
+<link href="search.html" rel="search" title="Search"/>
+<link href="api.html" rel="next" title="API"/>
+</head>
+<body class="wy-body-for-nav">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="#">
+            METASPACE Converter
+          </a>
+<div role="search">
+<form action="search.html" class="wy-form" id="rtd-search-form" method="get">
+<input aria-label="Search docs" name="q" placeholder="Search docs" type="text"/>
+<input name="check_keywords" type="hidden" value="yes"/>
+<input name="area" type="hidden" value="default"/>
+</form>
+</div>
+</div><div aria-label="Navigation menu" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift"><nav aria-label="Mobile navigation menu" class="wy-nav-top">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="#">METASPACE Converter</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="Page navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a aria-label="Home" class="icon icon-home" href="#"></a></li>
+<li class="breadcrumb-item active">Welcome to METASPACE Converter’s documentation!</li>
+<li class="wy-breadcrumbs-aside">
+<a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+</li>
+</ul>
+<hr/>
+</div>
+<div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+<div itemprop="articleBody">
+<section id="welcome-to-metaspace-converter-s-documentation">
+<h1>Welcome to METASPACE Converter’s documentation!<a class="headerlink" href="#welcome-to-metaspace-converter-s-documentation" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://github.com/metaspace2020/metaspace-converter/actions/workflows/tests.yml"><img alt="Tests badge" src="https://img.shields.io/github/actions/workflow/status/metaspace2020/metaspace-converter/tests.yml?branch=master&amp;label=tests"/></a>
+<a class="reference external" href="https://metaspace2020.github.io/metaspace-converter/"><img alt="Docs badge" src="https://img.shields.io/github/actions/workflow/status/metaspace2020/metaspace-converter/docs.yml?label=documentation"/></a>
+<a class="reference external" href="https://pypi.org/project/metaspace-converter/"><img alt="PyPI badge" src="https://img.shields.io/pypi/v/metaspace-converter"/></a></p>
+<p>Python package to download and convert datasets from the <a class="reference external" href="https://metaspace2020.eu/">METASPACE</a>
+knowledge base to common formats for single-cell and spatial omics analysis.
+Datasets can be directly downloaded to
+<a class="reference external" href="https://anndata.readthedocs.io/en/stable/">AnnData</a> and <a class="reference external" href="https://spatialdata.scverse.org/en/latest/">SpatialData</a> objects.</p>
+<p><a class="reference external" href="https://anndata.readthedocs.io/en/stable/">AnnData</a> is the underlying data format
+of many packages of the <a class="reference external" href="https://doi.org/10.1038/s41587-023-01733-8">scverse</a> such as
+<a class="reference external" href="https://scanpy.readthedocs.io/en/stable/">ScanPy</a> for single-cell data analysis and
+<a class="reference external" href="https://squidpy.readthedocs.io/en/stable/">SquidPy</a> for spatial omics analysis.</p>
+<p>Another supported format that is part of the <a class="reference external" href="https://doi.org/10.1038/s41587-023-01733-8">scverse</a>
+is <a class="reference external" href="https://spatialdata.scverse.org/en/latest/">SpatialData</a> for storing, aligning, and processing spatial omics data.
+This enables users to easily align and integrate METASPACE datasets to other spatial omics modalities.</p>
+<p>The METASPACE-converter package uses the <a class="reference external" href="https://github.com/metaspace2020/metaspace/tree/master/metaspace/python-client">METASPACE python client</a>
+to download datasets from METASPACE.
+If you also need to upload or modify datasets on METASPACE, please check the <a class="reference external" href="https://metaspace2020.readthedocs.io/en/latest/index.html">Python client documentation</a>.</p>
+<p>If you encounter bugs or have suggestions for new features, please open an issue on <a class="reference external" href="https://github.com/metaspace2020/metaspace-converter">GitHub</a>.</p>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
+<p>You can install the package via pip:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">metaspace</span><span class="o">-</span><span class="n">converter</span>
+</pre></div>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#module-metaspace_converter">metaspace_converter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#module-metaspace_converter.colocalization">metaspace_converter.colocalization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#plain-anndata-with-scanpy">Plain AnnData with ScanPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#squidpy">SquidPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#convert-anndata-objects-to-ion-image-arrays">Convert AnnData objects to ion image arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#spatialdata">SpatialData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#colocalization-analysis">Colocalization Analysis</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="license">
+<h2>License<a class="headerlink" href="#license" title="Link to this heading"></a></h2>
+<p>Unless specified otherwise source code in file headers or LICENSE files present in subdirectories, all files of this package are licensed under the <a class="reference external" href="https://github.com/metaspace2020/metaspace/blob/master/LICENSE">Apache 2.0 license</a>.</p>
+</section>
+</section>
+</div>
+</div>
+<footer><div aria-label="Footer" class="rst-footer-buttons" role="navigation">
+<a accesskey="n" class="btn btn-neutral float-right" href="api.html" rel="next" title="API">Next <span aria-hidden="true" class="fa fa-arrow-circle-right"></span></a>
+</div>
+<hr/>
+<div role="contentinfo">
+<p>© Copyright 2023; Tim Daniel Rose, Andreas Eisenbarth, Theodore Alexandrov.</p>
+</div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+</div>
+</div>
+</section>
+</div>
+<script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+</body>
+</html>

@@ -1,0 +1,471 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>metaspace_converter.to_anndata &mdash; METASPACE Converter  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-codeautolink.css?v=b2176991" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            METASPACE Converter
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">METASPACE Converter</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">metaspace_converter.to_anndata</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for metaspace_converter.to_anndata</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Container</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">anndata</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnnData</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">metaspace</span><span class="w"> </span><span class="kn">import</span> <span class="n">SMInstance</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">metaspace.sm_annotation_utils</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">DEFAULT_DATABASE</span><span class="p">,</span>
+    <span class="n">DatasetNotFound</span><span class="p">,</span>
+    <span class="n">IsotopeImages</span><span class="p">,</span>
+    <span class="n">SMDataset</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">metaspace_converter.constants</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">COL</span><span class="p">,</span>
+    <span class="n">METASPACE_KEY</span><span class="p">,</span>
+    <span class="n">OBS_INDEX_NAME</span><span class="p">,</span>
+    <span class="n">SPATIAL_KEY</span><span class="p">,</span>
+    <span class="n">VAR_INDEX_NAME</span><span class="p">,</span>
+    <span class="n">Shape2d</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">metaspace_converter.utils</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">empty_columns_to_nan</span><span class="p">,</span>
+    <span class="n">has_optical_image</span><span class="p">,</span>
+    <span class="n">iter_property_paths</span><span class="p">,</span>
+    <span class="n">stringify_list_columns</span><span class="p">,</span>
+    <span class="n">transform_coords</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="metaspace_to_anndata">
+<a class="viewcode-back" href="../../metaspace_converter.to_anndata.html#metaspace_converter.metaspace_to_anndata">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">metaspace_to_anndata</span><span class="p">(</span>
+    <span class="n">dataset</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SMDataset</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">dataset_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">database</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">fdr</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">use_tic</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">metadata_as_obs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">add_optical_image</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">sm</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SMInstance</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">annotation_filter</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnnData</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Downloads a METASPACE dataset to an :py:class:`AnnData` object.</span>
+
+<span class="sd">    See: https://metaspace2020.eu/about</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dataset: A METASPACE dataset instance. If not provided, the `dataset_id` must be given.</span>
+<span class="sd">        dataset_id: The unique ID of a dataset on METASPACE, e.g. &quot;2021-09-03_11h43m13s&quot;</span>
+<span class="sd">        database: A single METASPACE database given as a tuple of name and version. Usually it is</span>
+<span class="sd">            displayed on METASPACE as &quot;HMDB – v4&quot; which corresponds to `(&quot;HMDB&quot;, &quot;v4&quot;)`.</span>
+<span class="sd">        fdr: Returns only annotations for which the false discovery rate is less or equal to this</span>
+<span class="sd">            limit.</span>
+<span class="sd">        use_tic: When True, the output values will be scaled by the total ion count per pixel and</span>
+<span class="sd">            will be in 0.0 to 1.0 range.</span>
+<span class="sd">        metadata_as_obs: Whether to store metadata in the `obs` dataframe instead of `uns`. For a</span>
+<span class="sd">            single METASPACE dataset, metadata is the same for all pixels, so it would be duplicated</span>
+<span class="sd">            for all `obs`. When combining multiple datasets, it would be preserved in `obs` but</span>
+<span class="sd">            not in `uns`.</span>
+<span class="sd">        add_optical_image: Whether to embed the optical image for SquidPy</span>
+<span class="sd">        sm: Optionally a cached SMInstance</span>
+<span class="sd">        annotation_filter: Additional keyword arguments passed to the METASPACE API.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        An :py:class:`AnnData` object with</span>
+<span class="sd">            * ion intensities: ``.X``</span>
+<span class="sd">            * ion image pixel coordinates: ``.obs[[&quot;ion_image_pixel_x&quot;, &quot;ion_image_pixel_y&quot;]]``</span>
+<span class="sd">            * spatial coordinates: ``.obsm[&quot;spatial&quot;]``</span>
+<span class="sd">            * ion properties: ``.var``, for example &quot;formula&quot;, &quot;adduct&quot;, &quot;mz&quot;, &quot;fdr&quot;,</span>
+<span class="sd">              &quot;moleculeNames&quot;, &quot;moleculeIds&quot;, &quot;intensity&quot;…</span>
+<span class="sd">            * METASPACE metadata: ``.uns[&quot;metaspace&quot;]`` if not ``metadata_as_obs``</span>
+<span class="sd">            * SquidPy metadata: ``.uns[&quot;spatial&quot;]`` if ``add_optical_image``</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If something is wrong with the input data or parameters</span>
+<span class="sd">        metaspace.sm_annotation_utils.DatasetNotFound: If the dataset ID is not found</span>
+<span class="sd">        ConnectionError: For any other network connectivity problems</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># This must stay at the top above `locals()`, so that `parameters` includes no later defined</span>
+    <span class="c1"># variables, but `dataset_id` definitely has a value.</span>
+    <span class="k">if</span> <span class="n">dataset</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">dataset_id</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">id</span>
+    <span class="c1"># Capture the function parameters (except non-serializable ones) so we can include them</span>
+    <span class="c1"># in the resulting AnnData.</span>
+    <span class="n">parameters</span> <span class="o">=</span> <span class="n">_dict_without_keys</span><span class="p">(</span><span class="nb">locals</span><span class="p">(),</span> <span class="n">keys</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;sm&quot;</span><span class="p">,</span> <span class="s2">&quot;dataset&quot;</span><span class="p">))</span>
+
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">get_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">dataset_id</span><span class="o">=</span><span class="n">dataset_id</span><span class="p">,</span> <span class="n">sm</span><span class="o">=</span><span class="n">sm</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">dataset</span><span class="o">.</span><span class="n">status</span> <span class="o">!=</span> <span class="s2">&quot;FINISHED&quot;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">DatasetNotFound</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dataset with ID </span><span class="si">{</span><span class="n">dataset</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> has not finished processing.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">database</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">database</span> <span class="o">=</span> <span class="n">DEFAULT_DATABASE</span>
+
+    <span class="c1"># Download annotations</span>
+    <span class="n">annotations</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">results</span><span class="p">(</span>
+        <span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">,</span>
+        <span class="n">fdr</span><span class="o">=</span><span class="n">fdr</span><span class="p">,</span>
+        <span class="n">include_chem_mods</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">include_neutral_losses</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">annotation_filter</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">annotations</span> <span class="o">=</span> <span class="n">_add_annotations_index</span><span class="p">(</span><span class="n">annotations</span><span class="p">,</span> <span class="n">index_name</span><span class="o">=</span><span class="n">VAR_INDEX_NAME</span><span class="p">)</span>
+    <span class="n">annotations</span> <span class="o">=</span> <span class="n">_normalize_annotations_for_serialization</span><span class="p">(</span><span class="n">annotations</span><span class="p">)</span>
+
+    <span class="c1"># Download ion images</span>
+    <span class="n">isotope_images</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">all_annotation_images</span><span class="p">(</span>
+        <span class="n">only_first_isotope</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">fdr</span><span class="o">=</span><span class="n">fdr</span><span class="p">,</span>
+        <span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">,</span>
+        <span class="n">scale_intensity</span><span class="o">=</span><span class="s2">&quot;TIC&quot;</span> <span class="k">if</span> <span class="n">use_tic</span> <span class="k">else</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">annotation_filter</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">isotope_images</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;No isotope images available for dataset </span><span class="si">{</span><span class="n">dataset</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> and database &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">database</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> – </span><span class="si">{</span><span class="n">database</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">. Was the database selected for processing on METASPACE?&quot;</span>
+        <span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">annotations</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">isotope_images</span><span class="p">)</span>
+
+    <span class="c1"># Sort isotope images to match the annotations.</span>
+    <span class="n">isotope_images</span> <span class="o">=</span> <span class="n">_sort_isotope_images_like</span><span class="p">(</span><span class="n">isotope_images</span><span class="p">,</span> <span class="n">annotations</span><span class="p">)</span>
+
+    <span class="c1"># Create X matrix (all ion pixels flattened to primary axis)</span>
+    <span class="n">shape</span> <span class="o">=</span> <span class="n">get_ion_image_shape</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+    <span class="n">ion_intensities</span> <span class="o">=</span> <span class="n">_create_anndata_x</span><span class="p">(</span><span class="n">isotope_images</span><span class="p">,</span> <span class="n">shape</span><span class="p">)</span>
+
+    <span class="c1"># Create observations dataframe</span>
+    <span class="n">obs</span> <span class="o">=</span> <span class="n">_create_obs_with_coordinates</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+
+    <span class="c1"># Scanpy looks up (x, y) coordinates from obsm.</span>
+    <span class="n">obsm</span> <span class="o">=</span> <span class="p">{</span><span class="n">SPATIAL_KEY</span><span class="p">:</span> <span class="n">obs</span><span class="p">[[</span><span class="n">COL</span><span class="o">.</span><span class="n">ion_image_pixel_x</span><span class="p">,</span> <span class="n">COL</span><span class="o">.</span><span class="n">ion_image_pixel_y</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="p">}</span>
+
+    <span class="n">adata</span> <span class="o">=</span> <span class="n">AnnData</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">ion_intensities</span><span class="p">,</span> <span class="n">var</span><span class="o">=</span><span class="n">annotations</span><span class="p">,</span> <span class="n">obs</span><span class="o">=</span><span class="n">obs</span><span class="p">,</span> <span class="n">obsm</span><span class="o">=</span><span class="n">obsm</span><span class="p">)</span>
+
+    <span class="c1"># Add metadata</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">metadata_as_obs</span><span class="p">:</span>
+        <span class="n">adata</span><span class="o">.</span><span class="n">uns</span><span class="p">[</span><span class="n">METASPACE_KEY</span><span class="p">]</span> <span class="o">=</span> <span class="n">_create_uns_for_metaspace</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">metadata_df</span> <span class="o">=</span> <span class="n">_create_obs_for_metaspace</span><span class="p">(</span>
+            <span class="n">dataset</span><span class="p">,</span> <span class="n">obs_names</span><span class="o">=</span><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span>
+        <span class="p">)</span>
+        <span class="n">adata</span><span class="o">.</span><span class="n">obs</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">obs</span><span class="p">,</span> <span class="n">metadata_df</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Add optical image</span>
+    <span class="k">if</span> <span class="n">add_optical_image</span> <span class="ow">and</span> <span class="n">has_optical_image</span><span class="p">(</span><span class="n">dataset</span><span class="p">):</span>
+        <span class="n">_add_obsm_and_uns_for_squidpy</span><span class="p">(</span>
+            <span class="n">adata</span><span class="p">,</span>
+            <span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
+            <span class="n">pixel_coords_xy</span><span class="o">=</span><span class="n">obs</span><span class="p">[[</span><span class="n">COL</span><span class="o">.</span><span class="n">ion_image_pixel_x</span><span class="p">,</span> <span class="n">COL</span><span class="o">.</span><span class="n">ion_image_pixel_y</span><span class="p">]],</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">adata</span></div>
+
+
+
+<div class="viewcode-block" id="create_annotation_id">
+<a class="viewcode-back" href="../../metaspace_converter.to_anndata.html#metaspace_converter.create_annotation_id">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_annotation_id</span><span class="p">(</span>
+    <span class="n">formula</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">adduct</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">chem_mod</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">neutral_loss</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">formula</span><span class="si">}{</span><span class="n">adduct</span><span class="si">}{</span><span class="n">chem_mod</span><span class="si">}{</span><span class="n">neutral_loss</span><span class="si">}</span><span class="s2">&quot;</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_add_annotations_index</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">index_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">VAR_INDEX_NAME</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+    <span class="n">df</span><span class="p">[</span><span class="n">index_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+        <span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">create_annotation_id</span><span class="p">(</span>
+            <span class="n">row</span><span class="o">.</span><span class="n">formula</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">adduct</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="s2">&quot;chemMod&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="s2">&quot;neutralLoss&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="p">),</span>
+        <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">index_name</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_normalize_annotations_for_serialization</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="c1"># AnnData cannot save dataframes containing Python objects (like lists).</span>
+    <span class="c1"># As workaround, we stringify to JSON.</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">stringify_list_columns</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;isotopeImages&quot;</span><span class="p">,</span> <span class="s2">&quot;moleculeNames&quot;</span><span class="p">,</span> <span class="s2">&quot;moleculeIds&quot;</span><span class="p">])</span>
+    <span class="c1"># AnnData can also not save columns containing only None (dtype object, tries to save as str)</span>
+    <span class="c1"># &quot;Can&#39;t implicitly convert non-string objects to strings&quot;</span>
+    <span class="k">return</span> <span class="n">empty_columns_to_nan</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="get_dataset">
+<a class="viewcode-back" href="../../metaspace_converter.to_anndata.html#metaspace_converter.get_dataset">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_dataset</span><span class="p">(</span>
+    <span class="n">dataset</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SMDataset</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">dataset_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">sm</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SMInstance</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SMDataset</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Fetch a dataset instance, if not provided</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">dataset</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">dataset</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">dataset_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Either `dataset` or `dataset_id` must be provided&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">sm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">sm</span> <span class="o">=</span> <span class="n">SMInstance</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">sm</span><span class="o">.</span><span class="n">dataset</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">dataset_id</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_ion_image_shape">
+<a class="viewcode-back" href="../../metaspace_converter.to_anndata.html#metaspace_converter.get_ion_image_shape">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_ion_image_shape</span><span class="p">(</span>
+    <span class="n">dataset</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SMDataset</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">dataset_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">sm</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SMInstance</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Shape2d</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the shape of a METASPACE dataset (in Numpy order).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dataset: A METASPACE dataset instance. If not provided, a dataset ID must be provided.</span>
+<span class="sd">        dataset_id: An optional METASPACE dataset ID, if no dataset instance is provided.</span>
+<span class="sd">        sm: An optional SMInstance, otherwise one will be created.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">get_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">dataset_id</span><span class="o">=</span><span class="n">dataset_id</span><span class="p">,</span> <span class="n">sm</span><span class="o">=</span><span class="n">sm</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dataset</span><span class="o">.</span><span class="n">image_size</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">],</span> <span class="n">dataset</span><span class="o">.</span><span class="n">image_size</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">]</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_sort_isotope_images_like</span><span class="p">(</span>
+    <span class="n">isotope_images</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">IsotopeImages</span><span class="p">],</span> <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">IsotopeImages</span><span class="p">]:</span>
+    <span class="n">images_dict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">formula</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">adduct</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">chem_mod</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">neutral_loss</span><span class="p">):</span> <span class="n">img</span> <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">isotope_images</span>
+    <span class="p">}</span>
+    <span class="c1"># Return them in the requested order.</span>
+    <span class="c1"># Note: pd.DataFrame.itertuples yields NamedTuple and is faster than iterrows.</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="n">images_dict</span><span class="p">[(</span><span class="n">row</span><span class="o">.</span><span class="n">formula</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">adduct</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">chemMod</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">neutralLoss</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">itertuples</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_create_anndata_x</span><span class="p">(</span><span class="n">isotope_images</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">IsotopeImages</span><span class="p">],</span> <span class="n">shape</span><span class="p">:</span> <span class="n">Shape2d</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="n">n_pixels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">n_ions</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">isotope_images</span><span class="p">)</span>
+    <span class="n">y_x_ion_stack</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dstack</span><span class="p">([</span><span class="n">_isotope_image_to_array</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">)</span> <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">isotope_images</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">y_x_ion_stack</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n_pixels</span><span class="p">,</span> <span class="n">n_ions</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_isotope_image_to_array</span><span class="p">(</span><span class="n">ion_image</span><span class="p">:</span> <span class="n">IsotopeImages</span><span class="p">,</span> <span class="n">shape</span><span class="p">:</span> <span class="n">Shape2d</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ion_image</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">ion_image</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ion_image</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_create_obs_with_coordinates</span><span class="p">(</span><span class="n">shape</span><span class="p">:</span> <span class="n">Shape2d</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">n_pixels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">pixel_coords_yx</span> <span class="o">=</span> <span class="n">all_image_pixel_coordinates</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="n">COL</span><span class="o">.</span><span class="n">ion_image_pixel_x</span><span class="p">:</span> <span class="n">pixel_coords_yx</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="n">COL</span><span class="o">.</span><span class="n">ion_image_pixel_y</span><span class="p">:</span> <span class="n">pixel_coords_yx</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="n">COL</span><span class="o">.</span><span class="n">ion_image_shape_y</span><span class="p">:</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">COL</span><span class="o">.</span><span class="n">ion_image_shape_x</span><span class="p">:</span> <span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="p">},</span>
+        <span class="n">index</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">RangeIndex</span><span class="p">(</span><span class="n">n_pixels</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">OBS_INDEX_NAME</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
+    <span class="p">)</span>
+
+
+<div class="viewcode-block" id="all_image_pixel_coordinates">
+<a class="viewcode-back" href="../../metaspace_converter.to_anndata.html#metaspace_converter.all_image_pixel_coordinates">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">all_image_pixel_coordinates</span><span class="p">(</span><span class="n">shape</span><span class="p">:</span> <span class="n">Shape2d</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a list of Y, X coordinates (Numpy order) for every pixel of an image.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        shape: The shape of a 2D image</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Array of shape (number of pixels, 2)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ys_and_xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">indices</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">dstack</span><span class="p">(</span><span class="n">ys_and_xs</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">)))</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_create_default_spatial_uns</span><span class="p">(</span>
+    <span class="n">image</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">scale_factor</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">spot_diameter</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">library_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;image&quot;</span><span class="p">,</span>
+    <span class="n">image_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;hires&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="n">library_id</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;images&quot;</span><span class="p">:</span> <span class="p">{</span><span class="n">image_key</span><span class="p">:</span> <span class="n">image</span><span class="p">}</span> <span class="k">if</span> <span class="n">image</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{},</span>
+            <span class="s2">&quot;scalefactors&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="sa">f</span><span class="s2">&quot;tissue_</span><span class="si">{</span><span class="n">image_key</span><span class="si">}</span><span class="s2">_scalef&quot;</span><span class="p">:</span> <span class="n">scale_factor</span><span class="p">,</span>
+                <span class="s2">&quot;spot_diameter_fullres&quot;</span><span class="p">:</span> <span class="n">spot_diameter</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_create_uns_for_metaspace</span><span class="p">(</span><span class="n">dataset</span><span class="p">:</span> <span class="n">SMDataset</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="c1"># Database details contain instances of MolecularDB, which are not JSON-serializable.</span>
+    <span class="c1"># Also, AnnData does  not support lists of dicts, so we have to convert to dict of dicts.</span>
+    <span class="c1"># See issue https://github.com/scverse/anndata/issues/708</span>
+    <span class="n">plain_db_details</span> <span class="o">=</span> <span class="p">{</span><span class="nb">str</span><span class="p">(</span><span class="n">idx</span><span class="p">):</span> <span class="n">db</span><span class="o">.</span><span class="n">_info</span> <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">db</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">database_details</span><span class="p">)}</span>
+    <span class="n">plain_projects</span> <span class="o">=</span> <span class="p">{</span><span class="nb">str</span><span class="p">(</span><span class="n">idx</span><span class="p">):</span> <span class="n">project</span> <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">project</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">projects</span><span class="p">)}</span>
+    <span class="n">plain_parameters</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="k">else</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">parameters</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+        <span class="s2">&quot;adducts&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="o">.</span><span class="n">adducts</span><span class="p">,</span>
+        <span class="s2">&quot;databases&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="o">.</span><span class="n">databases</span><span class="p">,</span>
+        <span class="s2">&quot;database_details&quot;</span><span class="p">:</span> <span class="n">plain_db_details</span><span class="p">,</span>
+        <span class="s2">&quot;polarity&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="o">.</span><span class="n">polarity</span><span class="p">,</span>
+        <span class="s2">&quot;image_size&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="o">.</span><span class="n">image_size</span><span class="p">,</span>
+        <span class="s2">&quot;submitter&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="o">.</span><span class="n">submitter</span><span class="p">,</span>
+        <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="o">.</span><span class="n">group</span><span class="p">,</span>
+        <span class="s2">&quot;principal_investigator&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="o">.</span><span class="n">principal_investigator</span><span class="p">,</span>
+        <span class="s2">&quot;projects&quot;</span><span class="p">:</span> <span class="n">plain_projects</span><span class="p">,</span>
+        <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="o">.</span><span class="n">status</span><span class="p">,</span>
+        <span class="s2">&quot;metadata&quot;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">metadata</span><span class="p">),</span>
+        <span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="o">.</span><span class="n">config</span><span class="p">,</span>
+        <span class="c1"># Include parameters used to generate this AnnData</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">metaspace_to_anndata</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">_parameters&quot;</span><span class="p">:</span> <span class="n">plain_parameters</span><span class="p">,</span>
+    <span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_create_obs_for_metaspace</span><span class="p">(</span>
+    <span class="n">dataset</span><span class="p">:</span> <span class="n">SMDataset</span><span class="p">,</span> <span class="n">obs_names</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="n">_create_uns_for_metaspace</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">)</span>
+    <span class="n">flattened_metadata</span> <span class="o">=</span> <span class="n">iter_property_paths</span><span class="p">(</span>
+        <span class="n">obj</span><span class="o">=</span><span class="p">{</span><span class="n">METASPACE_KEY</span><span class="p">:</span> <span class="n">metadata</span><span class="p">},</span>
+        <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span>
+        <span class="n">dont_traverse_types</span><span class="o">=</span><span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">),</span>
+        <span class="n">dont_descend_paths</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">METASPACE_KEY</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">metaspace_to_anndata</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">_parameters&quot;</span><span class="p">],</span>
+    <span class="p">)</span>
+    <span class="n">metadata_series</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">flattened_metadata</span><span class="p">))</span>
+    <span class="n">obs</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">metadata_series</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">obs_names</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="n">obs_names</span><span class="p">)</span>
+    <span class="c1"># METASPACE metadata contains a lot of list values.</span>
+    <span class="c1"># AnnData cannot save dataframes containing Python objects (like lists).</span>
+    <span class="c1"># As workaround, we stringify to JSON.</span>
+    <span class="n">obs</span> <span class="o">=</span> <span class="n">stringify_list_columns</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="nb">all</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">empty_columns_to_nan</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_add_obsm_and_uns_for_squidpy</span><span class="p">(</span><span class="n">adata</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">SMDataset</span><span class="p">,</span> <span class="n">pixel_coords_xy</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+    <span class="n">optical_images</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">optical_images</span><span class="p">()</span>
+    <span class="n">image_yx_rgb</span> <span class="o">=</span> <span class="n">optical_images</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># Transformation from ion image coordinate system to optical image (x, y order!).</span>
+    <span class="n">matrix_xy</span> <span class="o">=</span> <span class="n">optical_images</span><span class="o">.</span><span class="n">_transforms</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">coords_on_optical_xy</span> <span class="o">=</span> <span class="n">transform_coords</span><span class="p">(</span><span class="n">pixel_coords_xy</span><span class="p">,</span> <span class="n">matrix_xy</span><span class="p">)</span>
+    <span class="c1"># SquidPy looks up (x, y) coordinates from obsm.</span>
+    <span class="n">adata</span><span class="o">.</span><span class="n">obsm</span><span class="p">[</span><span class="n">SPATIAL_KEY</span><span class="p">]</span> <span class="o">=</span> <span class="n">coords_on_optical_xy</span>
+    <span class="c1"># SquidPy uses spatial information from uns.</span>
+    <span class="n">adata</span><span class="o">.</span><span class="n">uns</span><span class="p">[</span><span class="n">SPATIAL_KEY</span><span class="p">]</span> <span class="o">=</span> <span class="n">_create_default_spatial_uns</span><span class="p">(</span><span class="n">image</span><span class="o">=</span><span class="n">image_yx_rgb</span><span class="p">,</span> <span class="n">spot_diameter</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_dict_without_keys</span><span class="p">(</span><span class="n">dictionary</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">keys</span><span class="p">:</span> <span class="n">Container</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="c1"># Exclude keys from a dictionary</span>
+    <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dictionary</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">}</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023; Tim Daniel Rose, Andreas Eisenbarth, Theodore Alexandrov.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
